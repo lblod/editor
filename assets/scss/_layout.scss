@@ -1,0 +1,104 @@
+.justsayin {
+	display: none;
+}
+html {
+	box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+body {
+	margin: 0;
+	background: #eee;
+	font-family: helvetica neue, segoe ui, sans-serif;
+}
+.container {
+	margin: 0 auto;
+	padding: 0 1rem;
+	max-width: 90rem;
+}
+.page-container {
+	margin: 0 auto;
+	padding: 0 1rem;
+	max-width: 50rem;
+}
+h1 {
+	font-size: 1.5em;
+	font-weight: normal;
+}
+h2 {
+	margin-bottom: 0;
+	font-size: 1em;
+	font-weight: normal;
+	text-decoration: underline;
+}
+h3 {
+	margin-bottom: 0;
+}
+nav {
+	font-size: 14px;
+	margin-left: -.5em;
+	a {
+		display: inline-block;
+		color: #090;
+		text-decoration: none;
+		padding: .5em;
+		&:hover {
+			background-color: #ddd;
+		}
+	}
+}
+
+/* Layout > header */
+.header {
+	padding: 1rem;
+	h1 {
+		margin: 0;
+	}
+}
+
+/* Layout > browse list page */
+
+.listview {
+	display: flex;
+	margin: 0 0 0 -1rem;
+	padding-bottom: 2em;
+}
+.filter {
+	flex: 0 0 15rem;
+	padding: 0 1rem 0 2rem;
+	font-size: 14px;
+}
+.results {
+	flex: 1 1 20rem;
+}
+
+@media (min-width: 50em) {
+	.results {
+		padding: 0 1rem;
+	}
+}
+
+/* Layout > filter stuff */
+
+.facet {
+	line-height: 1.5em;
+}
+.facet-option {
+	position: relative;
+	-webkit-user-select: none;
+	user-select: none;
+	&.active::before {
+		content: '\2713';
+		position: absolute;
+		left: -1rem;
+		text-align: center;
+		width: 1rem;
+	}
+}
+:focus {
+	outline-offset: -1px;
+  outline: 2px auto $focus;
+}

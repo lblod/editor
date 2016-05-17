@@ -1,0 +1,24 @@
+
+.grid {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.col {
+	flex-basis: 10em;
+	flex-shrink: 0;
+	font-size: 2em;
+	font-weight: 100;
+}
+@media (min-width: 20em) {
+	.col {
+		flex-basis: 12em;
+		margin: 1rem;
+	}
+}
+@media (min-width: 60em) {
+	.col {
+		flex-basis: 14em;
+	}
+}

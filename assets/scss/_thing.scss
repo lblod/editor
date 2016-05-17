@@ -1,0 +1,48 @@
+.thing {
+	transition: transform .2s;
+	margin-bottom: .5em;
+	padding: 1rem;
+	background: #fff;
+	overflow: auto;
+	// &:hover {
+	// 	transform: translateX(-1em)
+	// }
+	p:last-child {
+		margin-bottom: 0;
+	}
+}
+.thing-name {
+	margin: 0;
+	line-height: 1.2em;
+	font-size: 1.25em;
+}
+.thing-type {
+	margin: 0;
+	line-height: 1em;
+	font-size: .875em;
+}
+.thing-description {
+	transition: opacity .2s;
+	max-height: 2.5em;
+	line-height: 1.25em;
+	font-size: .875em;
+	overflow: hidden;
+	opacity: .5;
+}
+.thing-avatar {
+	float: left;
+	width: 2.5em;
+	height: 2.5em;
+	border-radius: 2em;
+	background-color: #ddd;
+	margin-right: .6em;
+}
+
+
+.thing:hover {
+
+	.thing-description {
+		transition: none;
+		opacity: 1;
+	}
+}
