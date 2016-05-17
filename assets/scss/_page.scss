@@ -1,7 +1,9 @@
+/* Page - Something that looks like a piece of paper */
+
 .page {
 	position: relative;
-	margin-bottom: 2em;
-	padding: 1rem 3rem;
+	margin-bottom: 10em;
+	padding: 2rem 3rem;
 	background-color: white;
 	box-shadow: 0 1px 20px rgba(0, 0, 0, .2);
 	textarea {
@@ -15,6 +17,45 @@
 		resize: none;
 	}
 }
+
+/* Fixed elements in a page */
+
+.page-header {
+	margin: -2rem -3rem 1rem;
+	padding: 2rem 3rem 1.5rem;
+	background: $focus;
+	color: white;
+}
+.page-footer {
+	margin: 2rem -3rem -2rem;
+	padding: 1.5rem 3rem;
+	background: $focus;
+	color: white;
+	button {
+		border: none;
+		padding: .5rem 1rem;
+		font: inherit;
+		background: white;
+		color: $focus;
+	}
+}
+@media (min-width: 50em) {
+	.page-header {
+		margin: -2rem -3rem 2rem;
+		padding: 2rem 3rem 1.5rem;
+		background: $focus;
+		color: white;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		>.inp {
+			width: 45%;
+		}
+	}
+}
+
+/* Variable elements in a page */
+
 h2 {
 	margin-top: 2rem;
 }
@@ -27,13 +68,17 @@ h2 {
 	padding: 0 3rem;
 	margin: 0 -3rem;
 }
-.article-numbered textarea {
-	padding-top: 1rem;
-	margin-top: -1rem;
+.article-numbered {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	textarea {
+		padding-top: 1rem;
+		margin-top: -1rem;
+	}
 }
 .article-number {
 	font-size: 12px;
-	pointer-events:none;
+	pointer-events: none;
 }
 .article-tools {
 	position: absolute;
@@ -48,6 +93,7 @@ h2 {
 }
 
 /* Ref in article*/
+
 .ref {
 	position: absolute;
 	right: 0rem;
@@ -95,8 +141,6 @@ h2 {
 		background: red;
 	}
 }
-
-
 .p-ref {
 	font-size: 12px;
 }
@@ -121,8 +165,8 @@ h2 {
 		top: 0;
 		padding-left: 1rem;
 	}
-		.p-ref-a  {
-			display: block;
-			margin-bottom: 5px;
-		}
+	.p-ref-a {
+		display: block;
+		margin-bottom: 5px;
+	}
 }

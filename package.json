@@ -1,6 +1,6 @@
 {
-  "name": "lblod",
-  "description": "A Vue.js project",
+  "name": "lblod-editor",
+  "description": "Interface to edit and create decisions for LBLOD",
   "author": "Thomas <thomas@weconnectdata.com>",
   "scripts": {
     "dev": "webpack-dev-server --inline --hot",

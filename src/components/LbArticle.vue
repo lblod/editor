@@ -7,6 +7,7 @@
     </div>
     <div class="p-ref">
       <a href="#" class="p-ref-a" v-for="ref in article.refs">{{ref['@id']}}</a>
+      <a href="#" class="p-ref-add">+&nbsp;verwijzing</a>
     </div>
   </article>
 </template>
