@@ -3,11 +3,6 @@
     <div class="header">
       <div class="page-container">
         <h1>Besluit opmaken</h1>
-        <nav>
-          <a href="index.html">zoek</a>
-          <a href="create.html">schrijf</a>
-          <a href="bertem.html">bertem</a>
-        </nav>
       </div>
     </div>
     <div class="page-container">
