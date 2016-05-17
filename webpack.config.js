@@ -3,7 +3,6 @@ var webpack = require('webpack')
 
 module.exports = {
   entry: {
-    list: './src/list.js',
     create: './src/create.js'
   },
   output: {
