@@ -229,7 +229,11 @@ export default {
     rm (article) {
       for (var s = 0; s < this.decision.p.length; s++) {
         if (this.decision.p[s] === article) {
-          this.decision.p.splice(s, 1)
+          if ((!this.decision.p[s + 1] || !this.decision.p[s + 1].text) && !this.decision.p[s-1].text) {
+            this.decision.p.splice(s, 1, inert(EMPTY_ARTICLE))
+          } else {
+            this.decision.p.splice(s, 1)
+          }
           return
         }
       }

@@ -16,6 +16,11 @@ export default {
   },
   attached () {
     this.input()
+  },
+  watch: {
+    model () {
+      this.input()
+    }
   }
 }
 </script>
