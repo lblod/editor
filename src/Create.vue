@@ -204,6 +204,12 @@ export default {
           if (!decision[context]) {
             decision[context] = []
           }
+          for (var j = 0; j < p.refs.length; j++) {
+            if (!p[p.refs[j].prop]) {
+              p[p.refs[j].prop] = []
+            }
+            p[p.refs[j].prop].push(p.refs[j].value)
+          }
           delete p.refs
           delete p.text
           decision[context].push(p)
