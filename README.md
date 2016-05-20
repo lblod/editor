@@ -1,6 +1,18 @@
 # lblod/editor
 
-> A Vue.js project
+Features
+
+ - [x] Press enter at the end of a paragraph to create a new one
+ - [x] Select a date to create a temporal triple
+ - [x] Select any paragraph text to make suggestions for triple object values
+ - [x] Set triples subject to decision or article or motivation based on title above the paragraph
+ - [x] Show linked data output (JSON-LD)
+ - [ ] Mini wizard to start a new document
+ - [ ] Automatically set paragraph type to motivation when it makes sense
+ - [ ] Automatically set paragraph type to article when it makes sense
+ - [ ] Refine suggestions to property range
+ - [ ] Avoid duplicate triples
+ - [ ] Delete triples
 
 ## Build Setup
 
