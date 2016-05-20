@@ -6,7 +6,7 @@
       <span class="ref-icon icon-times" @click="rm">&times;</span>
     </div>
     <div class="p-ref">
-      <a href="#" class="p-ref-a" v-for="ref in article.refs">{{ref.prop}}: {{ ref.value&&(ref.value['@id'] || ref.value) | json }}</a>
+      <item-ref v-for="ref in article.refs" :ref="ref"></item-ref>
       <input-ref :model.sync="article.refs"></input-ref>
     </div>
   </article>
@@ -14,9 +14,6 @@
 
 <script>
 import Paragraph from '../mixins/Paragraph.js'
-
-import InputRef from './InputRef.vue'
-import TextareaGrowing from './TextareaGrowing.vue'
 
 export default {
   props: ['article', 'num'],

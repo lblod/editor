@@ -18,7 +18,6 @@ export default {
 				return '?'
 			}
 			if (v['@id']) {
-				console.log(this.$root.map[v['@id']], v)
 				v = this.$root.map[v['@id']] || v
 			}
 			return v['schema:name'] || v.text || v['@id'] || v || '??'
