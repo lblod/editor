@@ -168,9 +168,18 @@ function inert (obj) {
 function addRefs (obj) {
   obj = inert(obj)
   console.log(obj)
+  var context
+  var counter = 1
   for (var i = 0; i < obj.p.length; i++) {
     if (!obj.p[i].refs) {
       obj.p[i].refs = []
+    }
+    if (obj.p[i].title) {
+      context = obj.p[i].context
+      counter = 1
+    } else if (context) {
+      obj.p[i]['@id'] = '_:temp#' + counter
+      counter++
     }
   }
   return obj
