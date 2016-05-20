@@ -149,21 +149,13 @@ h2 {
 	margin-right: 5px;
 	color: #08B;
 }
-.p-ref-add {
-	white-space: pre;
-	display: inline-block;
-	border-radius: 3px;
-	padding: 2px 5px;
-	background-color: $focus;
-	color: white;
-	text-decoration: none;
-}
 @media (min-width: 70em) {
 	.p-ref {
 		position: absolute;
 		left: 100%;
 		top: 0;
 		padding-left: 1rem;
+		width: calc(100vw / 2 - 25rem);
 	}
 	.p-ref-a {
 		display: block;

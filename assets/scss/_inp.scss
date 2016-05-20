@@ -58,3 +58,54 @@
 	color: inherit;
 	opacity: .6;
 }
+
+/* Ref */
+
+.inp-ref {
+	position: relative;
+  display: inline-block;
+}
+.inp-ref>input{
+	white-space: pre;
+	display: inline-block;
+	border: 0;
+	border-radius: 3px;
+	padding: 2px 5px;
+	width: 5em;
+	font:inherit;
+	// background-color: $focus;
+	// color: white;
+	text-decoration: none;
+	text-align: center;
+	box-shadow: 0 0 2px rgba(0,0,0,.5);
+	&:focus, &.focus {
+		width: 12em;
+		font-size: 14px;
+		text-align: left;
+	}
+}
+.ref-select {
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  margin-top: 3px;
+  min-width: calc(100% + 6px);
+  max-height: 30em;
+  background-color: white;
+  color: black;
+  white-space: normal;
+	box-shadow: 0 0 2px rgba(0,0,0,.5);
+	overflow: auto;
+}
+.ref-option {
+  padding: 0 10px;
+  white-space: nowrap;
+  line-height: 34px;
+  height: 34px;
+}
+.ref-ghost {
+  background-color: #ddd;
+}
+.ref-temp {
+	color: red;
+}

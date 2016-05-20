@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="blurred">
     <div class="header">
       <div class="page-container">
         <nav>
@@ -111,69 +111,66 @@ initialDecision = initialDecision || {
   },
   'dcterms:description': 'Op 15 juni 2014 liet de heer Bart Caron weten dat hij ontslag neemt als gemeenteraadslid. In vervanging van de heer Bart Caron dient een opvolger geïnstalleerd te worden. De heer Mattias Vandemaele, eerste opvolger op de lijst Groen, is bereid het mandaat van gemeenteraadslid op te nemen in opvolging van de heer Bart Caron.',
   p: [{
-    title: 'Aanleiding',
-    context: 'lbld:aanleiding'
+    title: 'Aanleiding'
   }, {
     text: 'Op 15 juni 2014 liet de heer Bart Caron weten dat hij ontslag neemt als gemeenteraadslid. De gemeenteraad nam daarvan akte in huidige zitting.'
   }, {
-    title: 'Argumentatie',
+    title: 'Motivatie',
     context: 'lbld:Motivation'
   }, {
+    '@id': '_:decision-163-motivation#1',
     text: 'Volgens het proces-verbaal van het hoofdstembureau van Kortrijk houdende vaststelling van de zetelverdeling tussen de lijsten en van de rangorde van de raadsleden en hun opvolgers, d.d. 14 oktober 2012, zoals geldig verklaard bij besluit van de Raad voor Verkiezingsbetwistingen van 21 december 2012, is de heer Mattias Vandemaele de eerste opvolger.\nDe heer Mattias Vandemaele is bereid het mandaat van gemeenteraadslid op te nemen in opvolging van de heer Bart Caron.\n\nDe raad gaat over tot het onderzoek van de geloofsbrieven. Daartoe wordt de zitting geschorst van xx tot xx. De geloofsbrieven worden onderzocht door de twee jongste raadsleden S. Vanneste en A. Vandendriesche.\nDe raad gaat vervolgens over tot de stemming over het onderzoek van de geloofsbrieven, waarvan de uitslag luidt als volgt: xx\n\nVervolgens gaat de heer Mattias Vandemaele over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.'
   }, {
-    title: 'Juridische grond',
-    context: 'lbld:juridisch'
+    title: 'Juridische grond'
   }, {
     text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
     refs: [{
-      '@id': '_:kiesdecreet'
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:kiesdecreet',
+      }
     }, {
-      '@id': '_:gemeentedecreet'
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet'
+      }
     }]
   }, {
-    title: 'Bevoegdheid',
-    context: 'lbld:bevoegd'
+    title: 'Bevoegdheid'
   }, {
     text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
     refs: [{
-      '@id': '_:gemeentedecreet#42'
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet#42'
+      }
     }, {
-      '@id': '_:gemeentedecreet#43'
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet#43'
+      }
     }]
   }, {
     title: 'Besluit',
-    context: 'lbld:article'
+    context: 'lbld:decision'
   }, {
     'type': 'lbld:Article',
     '@id': '_:decision-163#1',
-    text: 'De geloofsbrieven van de heer Mattias Vandemaele goed te keuren.',
-    refs: [{
-      '@id': '_:decision-163#1'
-    }]
+    text: 'De geloofsbrieven van de heer Mattias Vandemaele goed te keuren.'
   }, {
     'type': 'lbld:Article',
     '@id': '_:decision-163#2',
-    text: 'Akte te nemen van het proces-verbaal van eedaflegging van de heer Mattias Vandemaele.',
-    refs: [{
-      '@id': '_:decision-163#2'
-    }]
+    text: 'Akte te nemen van het proces-verbaal van eedaflegging van de heer Mattias Vandemaele.'
   }, {
     'type': 'lbld:Article',
     '@id': '_:decision-163#3',
-    text: 'De heer Mattias Vandemaele te installeren als gemeenteraadslid.',
-    refs: [{
-      '@id': '_:decision-163#3'
-    }]
+    text: 'De heer Mattias Vandemaele te installeren als gemeenteraadslid.'
   }, {
     'type': 'lbld:Article',
     '@id': '_:decision-163#4',
-    text: 'Huidige beslissing binnen de twintig dagen mee te delen aan de Vlaamse Regering.',
-    refs: [{
-      '@id': '_:decision-163#4'
-    }]
+    text: 'Huidige beslissing binnen de twintig dagen mee te delen aan de Vlaamse Regering.'
   }, {
-    title: 'Bijlagen',
-    context: null
+    title: 'Bijlagen'
   }, {
     text: ''
   }]
@@ -181,6 +178,11 @@ initialDecision = initialDecision || {
 
 export default {
   data () {
+    for (var i = 0; i < initialDecision.p.length; i++) {
+      if (!initialDecision.p[i].refs) {
+        initialDecision.p[i].refs = []
+      }
+    }
     return {
       decision: initialDecision || {},
       json: 0
@@ -195,22 +197,46 @@ export default {
       for (var i = 0; i < decision.p.length; i++) {
         let p = decision.p[i]
 
-        // Title defines the context of the underlying articles
+        // Title sets the context of the underlying paragraphs
         if (p.title) {
           context = p.context
-        }
-
-        // Title defines the context of the underlying articles
-        if (context && p.refs) {
+        } else if (context) {
           if (!decision[context]) {
             decision[context] = []
           }
-          decision[context] = decision[context].concat(p.refs)
+          delete p.refs
+          delete p.text
+          decision[context].push(p)
+        } else if (p.refs) {
+          for (var j = 0; j < p.refs.length; j++) {
+            if (!decision[p.refs[j].prop]) {
+              decision[p.refs[j].prop] = []
+            }
+            decision[p.refs[j].prop].push(p.refs[j].value)
+          }
         }
-        
       }
       delete decision.p
+      for (let key in decision) {
+        if (!decision[key]) {
+          delete decision[key]
+        }
+      }
       return decision
+    }
+  },
+  methods: {
+    blurred () {
+      this.$broadcast('blurred')
+    },
+    reset () {
+      window.localStorage.removeItem('decision')
+      console.log('reset localStorage')
+      window.location.reload()
+    },
+    save () {
+      window.localStorage.setItem('decision', JSON.stringify(this.decision))
+      console.log('saved in localStorage')
     }
   },
   events: {
@@ -237,17 +263,6 @@ export default {
           return
         }
       }
-    }
-  },
-  methods: {
-    reset () {
-      window.localStorage.removeItem('decision')
-      console.log('reset localStorage')
-      window.location.reload()
-    },
-    save () {
-      window.localStorage.setItem('decision', JSON.stringify(this.decision))
-      console.log('saved in localStorage')
     }
   },
   components: {
