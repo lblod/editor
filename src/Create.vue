@@ -30,7 +30,7 @@
             <select class="inp-text inp-select" v-model="template" @change="start(template)">
               <option value="0">Standaard besluit</option>
               <option value="1">Voordracht kandidaat-schepen</option>
-              <option value="2">Aktename ontslag</option>
+              <option value="2">Ontslag gemeenteraadslid - Aktename</option>
             </select>
           </label>
           <label class="inp">
@@ -128,7 +128,17 @@
           </p>
         </div>
         <div v-if="wizard==2">
-        Coming soon
+          <label class="inp">
+            <span class="inp-label">Ontslagnemer</span>
+            <input class="inp-text" type="text" v-model="data.pname" placeholder="Voornaam + familienaam">
+          </label>
+          <label class="inp">
+            <span class="inp-label">Opvolger</span>
+            <input class="inp-text" type="text" v-model="data.oname" placeholder="Voornaam + familienaam">
+          </label>
+          <p>
+            <button type="button" @click="compile()">Doorgaan</button>
+          </p>
         </div>
       </div>
       <div class="page" v-if="json==1">
@@ -157,6 +167,7 @@ function inert (obj) {
 }
 function addRefs (obj) {
   obj = inert(obj)
+  console.log(obj)
   for (var i = 0; i < obj.p.length; i++) {
     if (!obj.p[i].refs) {
       obj.p[i].refs = []
@@ -309,30 +320,81 @@ var templates = [
     text: ''
   }],
   [{
-    title: 'Aanleiding'
+    title: 'Dit is geen beluit?'
   }, {
     text: ''
+  }],
+  [{
+    title: 'Aanleiding'
+  }, {
+    text: '{{pname}} liet weten dat hij ontslag neemt als gemeenteraadslid.'
   }, {
     title: 'Motivatie',
     context: 'lbld:Motivation'
   }, {
     '@id': '',
-    text: ''
+    text: 'Volgens het proces-verbaal van het hoofdstembureau van Kortrijk houdende vaststelling van de zetelverdeling tussen de lijsten en van de rangorde van de raadsleden en hun opvolgers, d.d. 14 oktober 2012, zoals geldig verklaard bij besluit van de Raad voor Verkiezingsbetwistingen van 21 december 2012, is {{oname}} de eerste opvolger.'
+  }, {
+    '@id': '',
+    text: '',
+  }, {
+    '@id': '',
+    text: '{{oname}} gaat over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.',
+    refs: [{
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet#7.3',
+      }
+    }]
   }, {
     title: 'Juridische grond'
   }, {
-    text: '',
+    text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
+    refs: [{
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:kiesdecreet',
+      }
+    }, {
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet'
+      }
+    }]
   }, {
     title: 'Bevoegdheid'
   }, {
-    text: '',
+    text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
+    refs: [{
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet#42'
+      }
+    }, {
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet#43'
+      }
+    }]
   }, {
     title: 'Besluit',
     context: 'lbld:decision'
   }, {
-    '@id': '',
     'type': 'lbld:Article',
-    text: ''
+    '@id': '',
+    text: 'De geloofsbrieven van {{oname}} goed te keuren.'
+  }, {
+    'type': 'lbld:Article',
+    '@id': '',
+    text: 'Akte te nemen van het proces-verbaal van eedaflegging van {{oname}}.'
+  }, {
+    'type': 'lbld:Article',
+    '@id': '',
+    text: '{{oname}} te installeren als gemeenteraadslid.'
+  }, {
+    'type': 'lbld:Article',
+    '@id': '',
+    text: 'Huidige beslissing binnen de twintig dagen mee te delen aan de Vlaamse Regering.'
   }, {
     title: 'Bijlagen'
   }, {
@@ -345,6 +407,7 @@ var data = [
   {},
   // Mandaat template
   {
+    title: 'Gemeenteraad - Voordracht mandaat',
     p: false,
     pname: '',
     pdate: '',
@@ -359,7 +422,11 @@ var data = [
     o2date: '',
   },
   // Ontslag
-  true
+  {
+    title: 'Gemeenteraad - Ontslag gemeenteraadslid - Aktename',
+    pname: '',
+    oname: ''
+  }
 ]
 
 export default {
@@ -441,6 +508,13 @@ export default {
     compile () {
       var decision = inert(emptyDecision)
       decision.p = inert(templates[this.wizard])
+      for (let key in this.data) {
+        for (var i = 0; i < decision.p.length; i++) {
+          if ( decision.p[i].text)
+          decision.p[i].text = decision.p[i].text.replace('{{' + key + '}}', this.data[key])
+        }
+      }
+      decision['dcterms:title'] = this.data.title
       this.decision = addRefs(decision)
       // TODO: replace template data based on this.data[this.wizard]
       this.json = 0

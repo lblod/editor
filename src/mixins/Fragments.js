@@ -276,6 +276,9 @@ export default {
         id: '_:gemeentedecreet#42',
         text: 'Gemeentedecreet artikel 42'
       }, {
+        id: '_:gemeentedecreet#7.3',
+        text: 'Gemeentedecreet artikel 7 §3'
+      }, {
         id: '_:decision-79#1',
         text: 'Besluit 79 artikel 1'
       }, {
