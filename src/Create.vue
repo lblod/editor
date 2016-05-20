@@ -3,7 +3,8 @@
     <div class="header">
       <div class="page-container">
         <nav>
-          <a href="#" :class="{active:!json}" @click.prevent="json=0">Editor</a>
+          <a href="#" :class="{active:!json&&wizard>=0}" @click.prevent="create">Nieuw</a>
+          <a href="#" :class="{active:!json&&wizard<0}" @click.prevent="json=0">Editor</a>
           <a href="#" :class="{active:json==1}" @click.prevent="json=1">Model</a>
           <a href="#" :class="{active:json==2}" @click.prevent="json=2">JSON-LD</a>
         </nav>
@@ -14,33 +15,27 @@
         <header class="page-header">
           <label class="inp">
             <span class="inp-label">Type</span>
-            <select class="inp-text inp-select">
+            <select class="inp-text inp-select" v-model="decision['lbld:type']">
               <option>Gemeenteraad</option>
             </select>
           </label>
           <label class="inp">
             <span class="inp-label">Aard</span>
-            <select class="inp-text inp-select">
+            <select class="inp-text inp-select" v-model="decision['lbld:aard']">
               <option>Mandaat</option>
             </select>
           </label>
           <label class="inp">
-            <span class="inp-label">Soort</span>
-            <select class="inp-text inp-select">
-              <option>Aktename ontslag</option>
+            <span class="inp-label">Sjabloon</span>
+            <select class="inp-text inp-select" v-model="template" @change="start(template)">
+              <option value="0">Standaard besluit</option>
+              <option value="1">Voordracht kandidaat-schepen</option>
+              <option value="2">Aktename ontslag</option>
             </select>
           </label>
           <label class="inp">
             <span class="inp-label">Auteur</span>
             <input class="inp-text" type="text" v-model="decision['schema:author']['schema:name']">
-          </label>
-          <label class="inp">
-            <span class="inp-label">Beleidsveld</span>
-            <input class="inp-text" type="text" v-model="decision['lbld:beleidsveld']">
-          </label>
-          <label class="inp">
-            <span class="inp-label">Toepassingsgebied</span>
-            <input class="inp-text" type="text" v-model="decision['dcterms:spatial']" placeholder="todo:geopicker">
           </label>
           <label class="inp">
             <span class="inp-label">BBC</span>
@@ -51,15 +46,89 @@
             <input class="inp-text" type="text" v-model="decision['@id']">
           </label>
         </header>
-        <textarea-growing style="font-size:1.5rem;margin-top:2rem;" :model.sync="decision['dcterms:title']" placeholder="Titel van het besluit"></textarea-growing>
-        <section class="section" v-for="p in decision.p" track-by="$index">
-          <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
-          <lb-article v-if="p.type=='lbld:Article'" :article.sync="p"></lb-article>
-          <lb-paragraph v-if="p.type!=='lbld:Article'&&!p.title" :article.sync="p"></lb-paragraph>
-        </section>
-        <div class="page-footer">
-          <button type="button" @click="save">Bewaren</button>
-          <button type="button" @click="reset">Reset</button>
+        <div class="mode-editor" v-if="wizard<0">
+          <textarea-growing style="font-size:1.5rem;margin-top:2rem;" :model.sync="decision['dcterms:title']" placeholder="Titel van het besluit"></textarea-growing>
+          <section class="section" v-for="p in decision.p" track-by="$index">
+            <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
+            <lb-article v-if="p.type=='lbld:Article'" :article.sync="p"></lb-article>
+            <lb-paragraph v-if="p.type!=='lbld:Article'&&!p.title" :article.sync="p"></lb-paragraph>
+          </section>
+          <div class="page-footer" style="display:none">
+            <button type="button" @click="save">Bewaren</button>
+            <button type="button" @click="reset">Reset</button>
+          </div>
+        </div>
+        <div v-if="wizard==0">
+          <p>
+            Kies een sjabloon om snel een besluit op te maken.
+          </p>
+          <ul>
+            <li><a href="#" @click.prevent="start(1)">Voordracht kandidaat schepen</a></li>
+            <li><a href="#" @click.prevent="start(2)">Aktename ontslag</a></li>
+          </ul>
+          <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
+        </div>
+        <div v-if="wizard==1">
+          <label class="inp">
+            <span class="inp-label">Kandidaat-schepen</span>
+            <input class="inp-text" type="text" v-model="data.kname" placeholder="Voornaam + familienaam">
+          </label>
+          <label class="inp">
+            <span class="inp-label">Einddatum van mandaag</span>
+            <input class="inp-text inp-date" type="date" v-model="data.kdate">
+          </label>
+          <br>
+          <div v-if="data.p">
+            <label class="inp">
+              <span class="inp-label">Te vervangen schepen</span>
+              <input class="inp-text" type="text" v-model="data.prev" placeholder="Voornaam + familienaam">
+            </label>
+            <label class="inp">
+              <span class="inp-label">Einddatum van mandaat</span>
+              <input class="inp-text inp-date" type="date" v-model="data.end">
+            </label>
+            <label class="inp">
+              <span class="inp-label">Reden van vervanging</span>
+              <input class="inp-text" type="text" v-model="data.reason">
+            </label>
+          </div>
+          <div v-else>
+            <a href="#" @click.prevent="data.p=true">Te vervangen schepen</a>
+          </div>
+          <br>
+          <div v-if="data.o1">
+            <label class="inp">
+              <span class="inp-label">Opvolger</span>
+              <input class="inp-text" type="text" v-model="data.o1name" placeholder="Voornaam + familienaam">
+            </label>
+            <label class="inp">
+              <span class="inp-label">Einddatum van mandaat</span>
+              <input class="inp-text inp-date" type="date" v-model="data.o1date">
+            </label>
+          </div>
+          <div v-else>
+            <a href="#" @click.prevent="data.o1=true">Opvolger</a>
+          </div>
+          <br>
+          <div v-if="data.o2">
+            <label class="inp">
+              <span class="inp-label">Tweede opvolger</span>
+              <input class="inp-text" type="text" v-model="data.o2name" placeholder="Voornaam + familienaam">
+            </label>
+            <label class="inp">
+              <span class="inp-label">Einddatum van mandaat</span>
+              <input class="inp-text inp-date" type="date" v-model="data.o2date">
+            </label>
+          </div>
+          <div v-if="data.o1&&!data.o2">
+            <a href="#" @click.prevent="data.o2=true">Tweede opvolger</a>
+          </div>
+          <p>
+            <button type="button" @click="compile()">Doorgaan</button>
+          </p>
+        </div>
+        <div v-if="wizard==2">
+        Coming soon
         </div>
       </div>
       <div class="page" v-if="json==1">
@@ -84,14 +153,23 @@ const EMPTY_ARTICLE = {
   'dcterms:description': null
 }
 function inert (obj) {
-  return JSON.parse(JSON.stringify(obj))
+  return obj && JSON.parse(JSON.stringify(obj)) || obj
+}
+function addRefs (obj) {
+  obj = inert(obj)
+  for (var i = 0; i < obj.p.length; i++) {
+    if (!obj.p[i].refs) {
+      obj.p[i].refs = []
+    }
+  }
+  return obj
 }
 
-var initialDecision 
+var sampleDecision 
 try {
-  initialDecision = JSON.parse(window.localStorage.getItem('decision'))
+  sampleDecision = JSON.parse(window.localStorage.getItem('decision'))
 } catch (e) {}
-initialDecision = initialDecision || {
+sampleDecision = sampleDecision || {
   '@type': 'lbld:Decision',
   '@id': '_:decision-163',
   'dcterms:title': 'Gemeenteraad - Ontslag gemeenteraadslid - Aktename',
@@ -175,17 +253,127 @@ initialDecision = initialDecision || {
     text: ''
   }]
 }
+var emptyDecision = {
+  '@type': 'lbld:Decision',
+  '@id': null,
+  'lbld:type': 'Gemeenteraad',
+  'lbld:aard': 'Mandaat',
+  'dcterms:title': null,
+  'dcterms:abstract': null,
+  'dcterms:spatial': null,
+  'dcterms:temporal': null,
+  'dcterms:topic': null,
+  'dcterms:type': null,
+  'lbld:legalBackground': null,
+  'lbld:responsibleFor': null,
+  'lbld:changes': null,
+  'lbld:replaces': null,
+  'lbld:responsibleFor': null,
+  'schema:author': {
+    '@type': 'schema:Person',
+    'schema:name': ''
+  },
+  'dcterms:description': null,
+  p: []
+}
+// Templates paragraphs
+var templates = [
+  [{
+    title: 'Aanleiding'
+  }, {
+    text: ''
+  }, {
+    title: 'Motivatie',
+    context: 'lbld:Motivation'
+  }, {
+    '@id': '',
+    text: ''
+  }, {
+    title: 'Juridische grond'
+  }, {
+    text: '',
+  }, {
+    title: 'Bevoegdheid'
+  }, {
+    text: '',
+  }, {
+    title: 'Besluit',
+    context: 'lbld:decision'
+  }, {
+    '@id': '',
+    'type': 'lbld:Article',
+    text: ''
+  }, {
+    title: 'Bijlagen'
+  }, {
+    text: ''
+  }],
+  [{
+    title: 'Aanleiding'
+  }, {
+    text: ''
+  }, {
+    title: 'Motivatie',
+    context: 'lbld:Motivation'
+  }, {
+    '@id': '',
+    text: ''
+  }, {
+    title: 'Juridische grond'
+  }, {
+    text: '',
+  }, {
+    title: 'Bevoegdheid'
+  }, {
+    text: '',
+  }, {
+    title: 'Besluit',
+    context: 'lbld:decision'
+  }, {
+    '@id': '',
+    'type': 'lbld:Article',
+    text: ''
+  }, {
+    title: 'Bijlagen'
+  }, {
+    text: ''
+  }]
+]
+// Template data
+var data = [
+  // Default template has no data
+  {},
+  // Mandaat template
+  {
+    p: false,
+    pname: '',
+    pdate: '',
+    preason: '',
+    kname: '',
+    kdate: '',
+    o1: false,
+    o1name: '',
+    o1date: '',
+    o2: false,
+    o2name: '',
+    o2date: '',
+  },
+  // Ontslag
+  true
+]
 
 export default {
   data () {
-    for (var i = 0; i < initialDecision.p.length; i++) {
-      if (!initialDecision.p[i].refs) {
-        initialDecision.p[i].refs = []
-      }
-    }
+    // Default view
+    var wizard = 0
+    var initialDecision = wizard >= 0 ? emptyDecision : sampleDecision
+
     return {
-      decision: initialDecision || {},
-      json: 0
+      decision: addRefs(initialDecision),
+      json: 0,
+      template: 0,
+      wizard: wizard,
+      data: null
     }
   },
   computed: {
@@ -234,6 +422,29 @@ export default {
   methods: {
     blurred () {
       this.$broadcast('blurred')
+    },
+    create () {
+      this.json = 0
+      this.wizard = 0
+      this.decision = addRefs(emptyDecision)
+    },
+    start (tpl) {
+      this.data = inert(data[tpl])
+      console.log(inert(data[tpl]))
+      if (!data[tpl]) {
+        this.compile(tpl)
+      } else {
+        this.wizard = tpl
+        this.template = tpl
+      }
+    },
+    compile () {
+      var decision = inert(emptyDecision)
+      decision.p = inert(templates[this.wizard])
+      this.decision = addRefs(decision)
+      // TODO: replace template data based on this.data[this.wizard]
+      this.json = 0
+      this.wizard = -1
     },
     reset () {
       window.localStorage.removeItem('decision')

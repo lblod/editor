@@ -16,13 +16,20 @@
 		font-size: 14px;
 		resize: none;
 	}
+	button {
+		border: none;
+		padding: .5rem 1rem;
+		font: inherit;
+		background: $focus;
+		color: white;
+	}
 }
 
 /* Fixed elements in a page */
 
 .page-header {
 	margin: -2rem -3rem 1rem;
-	padding: 2rem 3rem 1.5rem;
+	padding: 1rem 3rem;
 	background: $focus;
 	color: white;
 }
@@ -42,7 +49,7 @@
 @media (min-width: 50em) {
 	.page-header {
 		margin: -2rem -3rem 2rem;
-		padding: 2rem 3rem 1.5rem;
+		padding: 2rem 3rem;
 		background: $focus;
 		color: white;
 		display: flex;

@@ -10,15 +10,14 @@
 .inp {
 	display: flex;
 	font: inherit;
-	padding-left: 5px;
 	line-height: 24px;
-	margin-bottom: 5px;
+	margin: 10px 0;
 	page-break-inside: avoid;
 }
 .inp-label {
 	padding-right: .5rem;
 	display: inline-block;
-	min-width: 4rem;
+	min-width: 4.5rem;
 	padding-top: 1px;
 }
 .inp-text {
@@ -26,7 +25,8 @@
 	flex-grow: 1;
 	margin: 0;
 	border-radius: 0;
-	border: 1px solid rgba(255, 255, 255, .2);
+	border: 1px solid transparent;
+	border-bottom-color: transparentize($focus, .5);
 	padding: 0 5px;
 	min-width: 1rem;
 	background: none;
@@ -35,8 +35,23 @@
 	color: inherit;
 	&:focus {
 		outline: none;
-		border-color: inherit;
+		border-bottom-color: $focus;
 	}
+}
+.page-header {
+	.inp {
+		margin: 3px 0;
+	}
+	.inp-text {
+		border: 1px solid rgba(255, 255, 255, .2);
+		&:focus {
+			border-color: inherit;
+		}
+	}
+}
+.inp-date {
+	flex-grow: 0;
+	flex-basis: 10em;
 }
 .inp-select {
 	-webkit-appearance: none;
