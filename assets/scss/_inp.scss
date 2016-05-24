@@ -74,6 +74,35 @@
 	opacity: .6;
 }
 
+/* Inp spatial */
+
+.inp-spatial-fixed {
+	position: absolute;
+	z-index: 10;
+	top: 1rem;
+	left: 1rem;
+	right: 1rem;
+	background: white;
+	color: $focus;
+	box-shadow: 0 0 20px rgba(0,0,0,.3);
+}
+.inp-spatial-map {
+	height: 400px;
+}
+.inp-spatial-cancel {
+	line-height: 3rem;
+	text-align: center;
+	cursor: pointer;
+}
+.opacify-transition {
+	transition: opacity 0.3s;
+	opacity: 1;
+}
+.opacify-enter,
+.opacify-leave {
+	opacity: 0;
+}
+
 /* Ref */
 
 .inp-ref {

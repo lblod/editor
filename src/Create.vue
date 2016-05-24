@@ -62,8 +62,8 @@
             </select>
           </label>
           <label class="inp" v-if="env.advanced">
-            <span class="inp-label">URI</span>
-            <input class="inp-text" type="text" v-model="decision['@id']">
+            <span class="inp-label">Gebied</span>
+            <input-spatial :model.sync="decision['dcterms:spatial']"></input-spatial>
           </label>
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
@@ -181,6 +181,7 @@
 <script>
 // notule > besluiten > artikels
 import '../assets/scss/main.scss'
+import InputSpatial from './components/InputSpatial.vue'
 import LbArticle from './components/LbArticle.vue'
 import LbParagraph from './components/LbParagraph.vue'
 import TextareaGrowing from './components/TextareaGrowing.vue'
@@ -532,7 +533,7 @@ export default {
   events: {
     set (prop, value) {
       console.log('set cate', prop, value)
-      this.filterState[prop] = value
+      this.decision[prop] = value
     },
     append (article) {
       for (var s = 0; s < this.decision.p.length; s++) {
@@ -558,6 +559,7 @@ export default {
     }
   },
   components: {
+    InputSpatial,
     LbArticle,
     LbParagraph,
     TextareaGrowing
