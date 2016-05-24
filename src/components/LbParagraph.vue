@@ -1,6 +1,8 @@
 <template>
   <article class="article">
-    <textarea-growing :model.sync="article.text" placeholder="Lege paragraaf" @keydown.enter="enter" @select="select"></textarea-growing>
+    <div class="article-text">
+      <textarea-growing :model.sync="article.text" placeholder="Lege paragraaf" @keydown.enter="enter" @select="select"></textarea-growing>
+    </div>
     <div class="article-tools">
       <span class="ref-icon icon-times" @click="rm">&times;</span>
     </div>

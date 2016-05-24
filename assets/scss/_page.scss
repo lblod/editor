@@ -63,8 +63,12 @@
 
 /* Variable elements in a page */
 
-h2 {
-	margin-top: 2rem;
+.page {
+	h1 {
+		font-size: 1.5em;
+	}
+}
+.section {
 }
 .section-refs {
 	margin-top: 1rem;
@@ -73,7 +77,7 @@ h2 {
 .article {
 	position: relative;
 	padding: 0 3rem;
-	margin: 0 -3rem;
+	margin: 0 -3rem 1rem;
 }
 .article-numbered {
 	margin-top: 1rem;
@@ -84,6 +88,7 @@ h2 {
 	}
 }
 .article-number {
+	display: block;
 	font-size: 12px;
 	pointer-events: none;
 }
@@ -154,18 +159,39 @@ h2 {
 .p-ref-a {
 	white-space: pre;
 	margin-right: 5px;
-	color: #08B;
+	>a {
+		color: #08B;
+	}
 }
 @media (min-width: 70em) {
 	.p-ref {
-		position: absolute;
-		left: 100%;
-		top: 0;
+		float: right;
+		padding: 2px;
 		padding-left: 1rem;
-		width: calc(100vw / 2 - 25rem);
+		width: calc(100vw / 2 - 24rem);
 	}
 	.p-ref-a {
 		display: block;
 		margin-bottom: 5px;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.mode-editor {
+		width: calc(21rem + 50vw);
+	}
+	.article {
+		margin-right: 0;
+		padding-right: 0;
+		&::after,
+		&::before {
+			clear: both;
+			content: '';
+			display: table;
+		}
+	}
+	.article-text {
+		float: left;
+		width: 42rem;
 	}
 }

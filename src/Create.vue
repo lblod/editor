@@ -14,40 +14,48 @@
       <div class="page" v-if="!json">
         <header class="page-header">
           <label class="inp">
-            <span class="inp-label">Type</span>
-            <select class="inp-text inp-select" v-model="decision['lbld:type']">
-              <option>Gemeenteraad</option>
+            <span class="inp-label">Orgaan</span>
+            <select class="inp-text inp-select" v-model="env.orgaan" @change="env.zitting=null">
+              <option value="">Selecteren...</option>
+              <optgroup :label="t.type" v-for="t in $root.orgaanOptions">
+                <option v-for="org in t.options" :value="org.id" v-text="org.text"></option>
+              </optgroup>
             </select>
           </label>
-          <label class="inp">
-            <span class="inp-label">Aard</span>
-            <select class="inp-text inp-select" v-model="decision['lbld:aard']">
-              <option>Mandaat</option>
+          <label class="inp" v-if="zittingOptions">
+            <span class="inp-label">Zitting</span>
+            <select class="inp-text inp-select" v-model="env.zitting">
+              <option v-for="zit in zittingOptions" :value="zit.id" v-text="zit.text"></option>
             </select>
           </label>
-          <label class="inp">
+          <label class="inp" v-if="zittingOptions&&env.zitting">
             <span class="inp-label">Sjabloon</span>
-            <select class="inp-text inp-select" v-model="template" @change="start(template)">
+            <select class="inp-text inp-select" v-model="env.template" @change="start(env.template)">
               <option value="0">Standaard besluit</option>
-              <option value="1">Voordracht kandidaat-schepen</option>
+              <option disabled>Voordracht kandidaat-burgemeester</option>
+              <option disabled>Voordracht kandidaat-voorzitter gemeenteraad</option>
+              <option value="1">Voordracht kandidaat-schepenen</option>
+              <option disabled>Voordracht OCMW-raadsleden</option>
+              <option disabled>Voordracht politieraadsleden</option>
               <option value="2">Ontslag gemeenteraadslid - Aktename</option>
             </select>
           </label>
-          <label class="inp">
-            <span class="inp-label">Auteur</span>
-            <input class="inp-text" type="text" v-model="decision['schema:author']['schema:name']">
+          <label class="inp" v-if="zittingOptions&&env.zitting">
+            <span class="inp-label">Onderwerp</span>
+            <input class="inp-text" type="text" v-model="decision.subject">
           </label>
-          <label class="inp">
+          <span v-if="zittingOptions&&!env.advanced && env.zitting" @click="env.advanced=1" style="margin-top: 10px; opacity:.5">Meer opties...</span>
+          <label class="inp" v-if="env.advanced">
             <span class="inp-label">BBC</span>
             <input class="inp-text" type="text" v-model="decision['lbld:bbcCode']" placeholder="todo:bbc suggestions">
           </label>
-          <label class="inp">
+          <label class="inp" v-if="env.advanced">
             <span class="inp-label">URI</span>
             <input class="inp-text" type="text" v-model="decision['@id']">
           </label>
         </header>
+        <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
         <div class="mode-editor" v-if="wizard<0">
-          <textarea-growing style="font-size:1.5rem;margin-top:2rem;" :model.sync="decision['dcterms:title']" placeholder="Titel van het besluit"></textarea-growing>
           <section class="section" v-for="p in decision.p" track-by="$index">
             <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
             <lb-article v-if="p.type=='lbld:Article'" :article.sync="p"></lb-article>
@@ -66,15 +74,20 @@
             <li><a href="#" @click.prevent="start(1)">Voordracht kandidaat schepen</a></li>
             <li><a href="#" @click.prevent="start(2)">Aktename ontslag</a></li>
           </ul>
-          <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
+          <p v-if="env.zitting">
+            <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
+          </p>
+          <p v-else>
+            Kies een orgaan & zitting
+          </p>
         </div>
         <div v-if="wizard==1">
           <label class="inp">
             <span class="inp-label">Kandidaat-schepen</span>
-            <input class="inp-text" type="text" v-model="data.kname" placeholder="Voornaam + familienaam">
+            <input class="inp-text" type="text" v-model="data.kname" @input="subj(data.kname)" placeholder="Voornaam + familienaam">
           </label>
           <label class="inp">
-            <span class="inp-label">Einddatum van mandaag</span>
+            <span class="inp-label">Einddatum van mandaat</span>
             <input class="inp-text inp-date" type="date" v-model="data.kdate">
           </label>
           <br>
@@ -123,21 +136,23 @@
           <div v-if="data.o1&&!data.o2">
             <a href="#" @click.prevent="data.o2=true">Tweede opvolger</a>
           </div>
-          <p>
-            <button type="button" @click="compile()">Doorgaan</button>
-          </p>
         </div>
         <div v-if="wizard==2">
           <label class="inp">
             <span class="inp-label">Ontslagnemer</span>
-            <input class="inp-text" type="text" v-model="data.pname" placeholder="Voornaam + familienaam">
+            <input class="inp-text" type="text" v-model="data.pname" @input="subj(data.pname)" placeholder="Voornaam + familienaam">
           </label>
           <label class="inp">
             <span class="inp-label">Opvolger</span>
             <input class="inp-text" type="text" v-model="data.oname" placeholder="Voornaam + familienaam">
           </label>
-          <p>
+        </div>
+        <div v-if="wizard>0">
+          <p v-if="env.zitting">
             <button type="button" @click="compile()">Doorgaan</button>
+          </p>
+          <p v-else>
+            Kies een orgaan & zitting
           </p>
         </div>
       </div>
@@ -160,12 +175,20 @@ import TextareaGrowing from './components/TextareaGrowing.vue'
 
 const EMPTY_ARTICLE = {
   '@id': null,
-  'dcterms:description': null
+  'text': null,
+  'refs': null
+}
+const CURRENT_USER = {
+  '@id': null,
+  'schema:name': 'Alfred Van Den Beele'
 }
 function inert (obj) {
   return obj && JSON.parse(JSON.stringify(obj)) || obj
 }
 function addRefs (obj) {
+  if (!obj) {
+    return emptyDecision
+  }
   obj = inert(obj)
   console.log(obj)
   var context
@@ -189,95 +212,11 @@ var sampleDecision
 try {
   sampleDecision = JSON.parse(window.localStorage.getItem('decision'))
 } catch (e) {}
-sampleDecision = sampleDecision || {
-  '@type': 'lbld:Decision',
-  '@id': '_:decision-163',
-  'dcterms:title': 'Gemeenteraad - Ontslag gemeenteraadslid - Aktename',
-  'dcterms:abstract': null,
-  'dcterms:spatial': null,
-  'dcterms:temporal': null,
-  'dcterms:topic': null,
-  'dcterms:type': null,
-  'lbld:legalBackground': null,
-  'lbld:responsibleFor': null,
-  'lbld:changes': null,
-  'lbld:replaces': null,
-  'lbld:responsibleFor': null,
-  'schema:author': {
-    '@type': 'schema:Person',
-    'schema:name': 'Petra Verhenne'
-  },
-  'dcterms:description': 'Op 15 juni 2014 liet de heer Bart Caron weten dat hij ontslag neemt als gemeenteraadslid. In vervanging van de heer Bart Caron dient een opvolger geïnstalleerd te worden. De heer Mattias Vandemaele, eerste opvolger op de lijst Groen, is bereid het mandaat van gemeenteraadslid op te nemen in opvolging van de heer Bart Caron.',
-  p: [{
-    title: 'Aanleiding'
-  }, {
-    text: 'Op 15 juni 2014 liet de heer Bart Caron weten dat hij ontslag neemt als gemeenteraadslid. De gemeenteraad nam daarvan akte in huidige zitting.'
-  }, {
-    title: 'Motivatie',
-    context: 'lbld:Motivation'
-  }, {
-    '@id': '_:decision-163-motivation#1',
-    text: 'Volgens het proces-verbaal van het hoofdstembureau van Kortrijk houdende vaststelling van de zetelverdeling tussen de lijsten en van de rangorde van de raadsleden en hun opvolgers, d.d. 14 oktober 2012, zoals geldig verklaard bij besluit van de Raad voor Verkiezingsbetwistingen van 21 december 2012, is de heer Mattias Vandemaele de eerste opvolger.\nDe heer Mattias Vandemaele is bereid het mandaat van gemeenteraadslid op te nemen in opvolging van de heer Bart Caron.\n\nDe raad gaat over tot het onderzoek van de geloofsbrieven. Daartoe wordt de zitting geschorst van xx tot xx. De geloofsbrieven worden onderzocht door de twee jongste raadsleden S. Vanneste en A. Vandendriesche.\nDe raad gaat vervolgens over tot de stemming over het onderzoek van de geloofsbrieven, waarvan de uitslag luidt als volgt: xx\n\nVervolgens gaat de heer Mattias Vandemaele over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.'
-  }, {
-    title: 'Juridische grond'
-  }, {
-    text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:kiesdecreet',
-      }
-    }, {
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet'
-      }
-    }]
-  }, {
-    title: 'Bevoegdheid'
-  }, {
-    text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet#42'
-      }
-    }, {
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet#43'
-      }
-    }]
-  }, {
-    title: 'Besluit',
-    context: 'lbld:decision'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '_:decision-163#1',
-    text: 'De geloofsbrieven van de heer Mattias Vandemaele goed te keuren.'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '_:decision-163#2',
-    text: 'Akte te nemen van het proces-verbaal van eedaflegging van de heer Mattias Vandemaele.'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '_:decision-163#3',
-    text: 'De heer Mattias Vandemaele te installeren als gemeenteraadslid.'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '_:decision-163#4',
-    text: 'Huidige beslissing binnen de twintig dagen mee te delen aan de Vlaamse Regering.'
-  }, {
-    title: 'Bijlagen'
-  }, {
-    text: ''
-  }]
-}
+sampleDecision = sampleDecision
 var emptyDecision = {
   '@type': 'lbld:Decision',
   '@id': null,
   'lbld:type': 'Gemeenteraad',
-  'lbld:aard': 'Mandaat',
   'dcterms:title': null,
   'dcterms:abstract': null,
   'dcterms:spatial': null,
@@ -289,11 +228,13 @@ var emptyDecision = {
   'lbld:changes': null,
   'lbld:replaces': null,
   'lbld:responsibleFor': null,
+  'lbld:zitting': null,
   'schema:author': {
     '@type': 'schema:Person',
     'schema:name': ''
   },
   'dcterms:description': null,
+  subject: null,
   p: []
 }
 // Templates paragraphs
@@ -310,10 +251,6 @@ var templates = [
     text: ''
   }, {
     title: 'Juridische grond'
-  }, {
-    text: '',
-  }, {
-    title: 'Bevoegdheid'
   }, {
     text: '',
   }, {
@@ -416,7 +353,7 @@ var data = [
   {},
   // Mandaat template
   {
-    title: 'Gemeenteraad - Voordracht mandaat',
+    title: 'Voordracht mandaat',
     p: false,
     pname: '',
     pdate: '',
@@ -432,7 +369,7 @@ var data = [
   },
   // Ontslag
   {
-    title: 'Gemeenteraad - Ontslag gemeenteraadslid - Aktename',
+    title: 'Ontslag gemeenteraadslid',
     pname: '',
     oname: ''
   }
@@ -446,6 +383,13 @@ export default {
 
     return {
       decision: addRefs(initialDecision),
+      env: {
+        advanced: false,
+        person: CURRENT_USER,
+        orgaan: '',
+        zitting: '_:zitting-1',
+        template: 0
+      },
       json: 0,
       template: 0,
       wizard: wizard,
@@ -453,6 +397,32 @@ export default {
     }
   },
   computed: {
+    decisionOrgaan () {
+      if (!this.zittingOptions || !this.decision || !this.decision['lbld:zitting']) {
+        return
+      }
+      return this.zittingOptions.find(z => z.id === this.decision['lbld:zitting']['@id'])
+    },
+    zittingOptions () {
+      if (!this.$root.fragments || !this.env.orgaan) {
+        return
+      }
+      return this.$root.fragments.filter(t => t['lbld:orgaan'] && t['lbld:orgaan']['@id'] === this.env.orgaan)
+    },
+    opschrift: {
+      get () {
+        if (!this.decision || !this.env.zitting || !this.env.template) {
+          return ''
+        }
+        var d = inert(data[this.env.template])
+        var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
+        var org = this.$root.fragments.find(o => zit['lbld:orgaan'] && (zit['lbld:orgaan']['@id'] === o.id))
+        return [org.text, zit.date, d.title, this.decision.subject].filter(Boolean).join(' - ')
+      },
+      set (text) {
+        this.decision['dcterms:title'] = text
+      }
+    },
     jsonld () {
       var decision = inert(this.decision);
       var context
@@ -492,6 +462,8 @@ export default {
           delete decision[key]
         }
       }
+      decision['dcterms:title'] = this.opschrift
+      delete decision.subject
       return decision
     }
   },
@@ -505,7 +477,9 @@ export default {
       this.decision = addRefs(emptyDecision)
     },
     start (tpl) {
+      this.env.template = tpl
       this.data = inert(data[tpl])
+      this.decision['dcterms:title'] = this.data && this.data.title
       console.log(inert(data[tpl]))
       if (!data[tpl]) {
         this.compile(tpl)
@@ -523,11 +497,14 @@ export default {
           decision.p[i].text = decision.p[i].text.replace('{{' + key + '}}', this.data[key])
         }
       }
-      decision['dcterms:title'] = this.data.title
+      decision['dcterms:title'] = this.data && this.data.title
       this.decision = addRefs(decision)
       // TODO: replace template data based on this.data[this.wizard]
       this.json = 0
       this.wizard = -1
+    },
+    subj (s) {
+      this.decision.subject = s
     },
     reset () {
       window.localStorage.removeItem('decision')
@@ -547,7 +524,9 @@ export default {
     append (article) {
       for (var s = 0; s < this.decision.p.length; s++) {
           if (this.decision.p[s] === article) {
-            this.decision.p.splice(s + 1, 0, inert(EMPTY_ARTICLE))
+            var a = inert(EMPTY_ARTICLE)
+            a.type = article.type
+            this.decision.p.splice(s + 1, 0, a)
             return
           }
       }

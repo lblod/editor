@@ -7,10 +7,10 @@ Features
  - [x] Select any paragraph text to make suggestions for triple object values
  - [x] Set triples subject to decision or article or motivation based on title above the paragraph
  - [x] Show linked data output (JSON-LD)
- - [ ] Mini wizard to start a new document
- - [ ] Automatically set paragraph type to motivation when it makes sense
- - [ ] Automatically set paragraph type to article when it makes sense
- - [ ] Refine suggestions to property range
+ - [x] Mini wizard to start a new document
+ - [x] Automatically set paragraph type to motivation when it makes sense
+ - [x] Automatically set paragraph type to article when it makes sense
+ - [x] Refine suggestions to property range
  - [ ] Avoid duplicate triples
  - [ ] Delete triples
 

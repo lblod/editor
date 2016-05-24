@@ -48,6 +48,11 @@ export default {
     },
     index () {
       var fragments = Object.values(this.$root.fragments)
+      if (this.term && this.prop) {
+        var prop = this.$root.map[this.prop]
+        console.log(fragments)
+        fragments = fragments.filter(f => prop.range.includes(f.type)).map(p => p['id'])
+      }
       fuseOptions.id = 'id'
       fuseOptions.keys = ['text']
       return new Fuse(fragments, fuseOptions)
@@ -94,8 +99,11 @@ export default {
       // }
       if (needle) {
         this.options = (this.propSearch ? this.propIndex : this.index).search(needle || ' ').slice(0, 20)
+      } else if (this.prop) {
+        var prop = this.$root.map[this.prop]
+        this.options = this.$root.fragments.filter(f => prop.range.includes(f.type)).map(p => p['id'])
       } else {
-        this.options = this.prop ? this.$root.fragments.map(p => p['id']) : this.$root.props.map(p => p['@id']);
+        this.options = this.$root.props.map(p => p['@id']);
       }
       this.ghost = Math.min(this.ghost, this.options.length - 1)
     },
@@ -123,9 +131,11 @@ export default {
       var ref
       if (typeof uri === 'string') {
         ref = {'@id': uri}
-      } else if (!uri && this.options) {
+      } else if (this.options && this.options[this.ghost]) {
         uri = this.options[this.ghost]
         ref = {'@id': uri}
+      } else {
+        ref = this.term
       }
       // Could use some refactoring
       if (ref) {
