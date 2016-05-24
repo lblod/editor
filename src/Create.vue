@@ -47,7 +47,19 @@
           <span v-if="zittingOptions&&!env.advanced && env.zitting" @click="env.advanced=1" style="margin-top: 10px; opacity:.5">Meer opties...</span>
           <label class="inp" v-if="env.advanced">
             <span class="inp-label">BBC</span>
-            <input class="inp-text" type="text" v-model="decision['lbld:bbcCode']" placeholder="todo:bbc suggestions">
+            <select class="inp-text inp-select" v-model="decision['lbld:bbcCode']" placeholder="todo:bbc suggestions">
+              <option value="">Selecteren...</option>
+              <option value="BV00">00 Algemene financiering</option>
+              <option value="BV01">01 Algemeen bestuur</option>
+              <option value="BV02">02 Zich verplaatsen en mobiliteit</option>
+              <option value="BV03">03 Natuur en milieubeheer</option>
+              <option value="BV04">04 Veiligheidszorg</option>
+              <option value="BV05">05 Ondernemen en werken</option>
+              <option value="BV06">06 Wonen en ruimtelijke ordening</option>
+              <option value="BV07">07 Cultuur en vrije tijd</option>
+              <option value="BV08">08 Leren en onderwijs</option>
+              <option value="BV09">09 Zorg en opvang</option>
+            </select>
           </label>
           <label class="inp" v-if="env.advanced">
             <span class="inp-label">URI</span>
@@ -225,6 +237,7 @@ var emptyDecision = {
   'dcterms:type': null,
   'lbld:legalBackground': null,
   'lbld:responsibleFor': null,
+  'lbld:bbcCode': '',
   'lbld:changes': null,
   'lbld:replaces': null,
   'lbld:responsibleFor': null,
