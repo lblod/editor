@@ -65,6 +65,10 @@
             <span class="inp-label">Gebied</span>
             <input-spatial :model.sync="decision['dcterms:spatial']"></input-spatial>
           </label>
+          <label class="inp" v-if="env.advanced">
+            <span class="inp-label">URI</span>
+            <input class="inp-text" type="text" v-model="decision.uri">
+          </label>
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
         <div class="mode-editor" v-if="wizard<0">
@@ -173,6 +177,12 @@
       </div>
       <div class="page" v-if="json==2">
         <pre v-text="jsonld|json"></pre>
+        <div id="jsonld">
+          <section class="section" v-for="p in decision.p" track-by="$index">
+            <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
+            <div v-else v-text="p.text"></div>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -193,6 +203,7 @@ const EMPTY_ARTICLE = {
 }
 const CURRENT_USER = {
   '@id': null,
+  '@type': 'schema:Person',
   'schema:name': 'Alfred Van Den Beele'
 }
 function inert (obj) {
@@ -214,7 +225,7 @@ function addRefs (obj) {
       context = obj.p[i].context
       counter = 1
     } else if (context) {
-      obj.p[i]['@id'] = '_:temp#' + counter
+      obj.p[i]['@id'] = 'current:' + context.slice(5) + '-' + counter
       counter++
     }
   }
@@ -248,6 +259,7 @@ var emptyDecision = {
     'schema:name': ''
   },
   'dcterms:description': null,
+  uri: null,
   subject: null,
   p: []
 }
@@ -259,7 +271,7 @@ var templates = [
     text: ''
   }, {
     title: 'Motivatie',
-    context: 'lbld:Motivation'
+    context: 'lbld:motivation'
   }, {
     '@id': '',
     text: ''
@@ -477,7 +489,26 @@ export default {
         }
       }
       decision['dcterms:title'] = this.opschrift
+      decision['@context'] = {
+        "schema": "http://schema.org/",
+        "dcterms": "http://purl.org/dc/terms/",
+        lbld: 'http://lbld.vlaanderen/'
+      }
       delete decision.subject
+      if (decision.uri) {
+        var uri = decision.uri
+        delete decision.uri
+        decision['@id'] = 'http://lblod.pieter.pm/decisions/' + uri + '.html#decision'
+        decision['@context'].current = 'http://lblod.pieter.pm/decisions/' + uri + '.html#'
+        this.$nextTick(function () {
+          var html = this.$el.querySelector('#jsonld').innerHTML
+          html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
+          this.$http.post('http://lblod.pieter.pm/admin/', {
+            uri: uri,
+            html: html
+          })
+        })
+      }
       return decision
     }
   },
@@ -512,6 +543,9 @@ export default {
         }
       }
       decision['dcterms:title'] = this.data && this.data.title
+      if (!decision.uri) {
+        decision.uri = Date.now() % 100
+      }
       this.decision = addRefs(decision)
       // TODO: replace template data based on this.data[this.wizard]
       this.json = 0

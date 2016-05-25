@@ -1,5 +1,5 @@
 <template>
-	<span class="p-ref-a"><a :href="'#'+prop">{{prop}}</a>: <a :href="'#'+value">{{ value }}</a></span>
+	<span class="p-ref-a">{{prop}}: <a :href="'#'+value">{{ value }}</a></span>
 </template>
 
 <script>
