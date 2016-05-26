@@ -206,6 +206,7 @@ const CURRENT_USER = {
   '@type': 'schema:Person',
   'schema:name': 'Alfred Van Den Beele'
 }
+const BACKEND_URL = 'http://dev.thomasg.be/'
 function inert (obj) {
   return obj && JSON.parse(JSON.stringify(obj)) || obj
 }
@@ -498,12 +499,12 @@ export default {
       if (decision.uri) {
         var uri = decision.uri
         delete decision.uri
-        decision['@id'] = 'http://lblod.pieter.pm/decisions/' + uri + '.html#decision'
-        decision['@context'].current = 'http://lblod.pieter.pm/decisions/' + uri + '.html#'
+        decision['@id'] = BACKEND_URL + 'decisions/' + uri + '.html#decision'
+        decision['@context'].current = BACKEND_URL + 'decisions/' + uri + '.html#'
         this.$nextTick(function () {
           var html = this.$el.querySelector('#jsonld').innerHTML
           html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
-          this.$http.post('http://lblod.pieter.pm/admin/', {
+          this.$http.post(BACKEND_URL + 'admin/index.php', {
             uri: uri,
             html: html
           })
