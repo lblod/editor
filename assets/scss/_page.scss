@@ -39,6 +39,7 @@
 	background: $focus;
 	color: white;
 	button {
+		margin-right: 1em;
 		border: none;
 		padding: .5rem 1rem;
 		font: inherit;
@@ -46,7 +47,6 @@
 		color: $focus;
 	}
 	a {
-		margin-left: 1em;
 		color: inherit;
 	}
 }

@@ -15,20 +15,20 @@
         <header class="page-header">
           <label class="inp">
             <span class="inp-label">Orgaan</span>
-            <select class="inp-text inp-select" v-model="env.orgaan" @change="env.zitting=null">
+            <select class="inp-text inp-select" v-model="env.orgaan" @change="defaultZitting">
               <option value="">Selecteren...</option>
               <optgroup :label="t.type" v-for="t in $root.orgaanOptions">
                 <option v-for="org in t.options" :value="org.id" v-text="org.text"></option>
               </optgroup>
             </select>
           </label>
-          <label class="inp" v-if="zittingOptions">
+          <label class="inp" v-if="zittingOptions.length">
             <span class="inp-label">Zitting</span>
             <select class="inp-text inp-select" v-model="env.zitting">
               <option v-for="zit in zittingOptions" :value="zit.id" v-text="zit.text"></option>
             </select>
           </label>
-          <label class="inp" v-if="zittingOptions&&env.zitting">
+          <label class="inp" v-if="zittingOptions.length&&env.zitting">
             <span class="inp-label">Sjabloon</span>
             <select class="inp-text inp-select" v-model="env.template" @change="start(env.template)">
               <option value="0">Standaard besluit</option>
@@ -40,34 +40,9 @@
               <option value="2">Ontslag gemeenteraadslid - Aktename</option>
             </select>
           </label>
-          <label class="inp" v-if="zittingOptions&&env.zitting">
+          <label class="inp" v-if="zittingOptions.length&&env.zitting">
             <span class="inp-label">Onderwerp</span>
             <input class="inp-text" type="text" v-model="decision.subject">
-          </label>
-          <span v-if="zittingOptions&&!env.advanced && env.zitting" @click="env.advanced=1" style="margin-top: 10px; opacity:.5">Meer opties...</span>
-          <label class="inp" v-if="env.advanced">
-            <span class="inp-label">BBC</span>
-            <select class="inp-text inp-select" v-model="decision['lbld:bbcCode']" placeholder="todo:bbc suggestions">
-              <option value="">Selecteren...</option>
-              <option value="BV00">00 Algemene financiering</option>
-              <option value="BV01">01 Algemeen bestuur</option>
-              <option value="BV02">02 Zich verplaatsen en mobiliteit</option>
-              <option value="BV03">03 Natuur en milieubeheer</option>
-              <option value="BV04">04 Veiligheidszorg</option>
-              <option value="BV05">05 Ondernemen en werken</option>
-              <option value="BV06">06 Wonen en ruimtelijke ordening</option>
-              <option value="BV07">07 Cultuur en vrije tijd</option>
-              <option value="BV08">08 Leren en onderwijs</option>
-              <option value="BV09">09 Zorg en opvang</option>
-            </select>
-          </label>
-          <label class="inp" v-if="env.advanced">
-            <span class="inp-label">Gebied</span>
-            <input-spatial :model.sync="decision['dcterms:spatial']"></input-spatial>
-          </label>
-          <label class="inp" v-if="env.advanced">
-            <span class="inp-label">URI</span>
-            <input class="inp-text" type="text" v-model="decision.uri">
           </label>
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
@@ -78,10 +53,35 @@
             <lb-paragraph v-if="p.type!=='lbld:Article'&&!p.title" :article.sync="p"></lb-paragraph>
           </section>
         </div>
-        <div v-if="wizard<0">
-          <div class="page-footer">
-            <button type="button" @click="publish">Publiceren</button>
-            <a :href="url" v-text="url" target="_blank"></a>
+        <div class="page-footer" v-if="wizard<0">
+          <button type="button" @click="publish">Publiceren</button>
+          <a :href="url" v-text="url" target="_blank" style="margin-top: 10px;"></a>
+          <span v-if="zittingOptions&&!env.advanced && env.zitting" @click="env.advanced=1" style="margin-top: 10px; opacity:.5">Meer opties...</span>
+          <div v-else style="width:45%;margin-top:20px;">
+            <label class="inp" v-if="env.advanced">
+              <span class="inp-label">URI</span>
+              <input class="inp-text" type="text" v-model="decision.uri">
+            </label>
+            <label class="inp" v-if="env.advanced">
+              <span class="inp-label">BBC</span>
+              <select class="inp-text inp-select" v-model="decision['lbld:bbcCode']" placeholder="todo:bbc suggestions">
+                <option value="">Selecteren...</option>
+                <option value="BV00">00 Algemene financiering</option>
+                <option value="BV01">01 Algemeen bestuur</option>
+                <option value="BV02">02 Zich verplaatsen en mobiliteit</option>
+                <option value="BV03">03 Natuur en milieubeheer</option>
+                <option value="BV04">04 Veiligheidszorg</option>
+                <option value="BV05">05 Ondernemen en werken</option>
+                <option value="BV06">06 Wonen en ruimtelijke ordening</option>
+                <option value="BV07">07 Cultuur en vrije tijd</option>
+                <option value="BV08">08 Leren en onderwijs</option>
+                <option value="BV09">09 Zorg en opvang</option>
+              </select>
+            </label>
+            <label class="inp" v-if="env.advanced">
+              <span class="inp-label">Gebied</span>
+              <input-spatial :model.sync="decision['dcterms:spatial']"></input-spatial>
+            </label>
           </div>
         </div>
         <div v-if="wizard==0">
@@ -182,6 +182,7 @@
       </div>
     </div>
     <div id="jsonld" style="display:none" v-if="render">
+      <h1 v-text="jsonld['dcterms:title']"></h1>
       <section class="section" v-for="p in decision.p" track-by="$index">
         <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
         <div v-else v-text="p.text"></div>
@@ -440,19 +441,15 @@ export default {
       }
       return this.$root.fragments.filter(t => t['lbld:orgaan'] && t['lbld:orgaan']['@id'] === this.env.orgaan)
     },
-    opschrift: {
-      get () {
-        if (!this.decision || !this.env.zitting || !this.env.template) {
-          return ''
-        }
-        var d = inert(data[this.env.template])
-        var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
-        var org = this.$root.fragments.find(o => zit['lbld:orgaan'] && (zit['lbld:orgaan']['@id'] === o.id))
-        return [org.text, zit.date, d.title, this.decision.subject].filter(Boolean).join(' - ')
-      },
-      set (text) {
-        this.decision['dcterms:title'] = text
+    opschrift () {
+      if (!this.decision) {
+        return ''
       }
+      var d = inert(data[this.env.template])
+      var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
+      var orgId = zit && zit['lbld:orgaan'] && zit['lbld:orgaan']['@id'] || this.env.orgaan
+      var org = this.$root.fragments.find(o => orgId === o.id)
+      return [org && org.text, zit && zit.date, d && d.title, this.decision.subject].filter(Boolean).join(' - ')
     },
     jsonld () {
       var decision = inert(this.decision);
@@ -511,6 +508,9 @@ export default {
   methods: {
     blurred () {
       this.$broadcast('blurred')
+    },
+    defaultZitting () {
+      this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : null
     },
     create () {
       this.json = 0
