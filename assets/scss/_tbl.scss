@@ -1,0 +1,24 @@
+.tbl {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	tr {
+		border-top: 1px solid #ddd;
+	}
+	tr:first-child {
+		border-top: 0;
+	}
+	td {
+		padding: 1rem 2rem;
+		vertical-align: top;
+	}
+	td:last-child {
+		padding: 0;
+	}
+	td>button {
+		float: right;
+		cursor: pointer;
+		line-height: inherit;
+		padding: 1rem 2rem;
+	}
+}

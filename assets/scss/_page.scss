@@ -22,7 +22,14 @@
 		font: inherit;
 		background: $focus;
 		color: white;
+		cursor: pointer;
+		&:hover {
+			background: transparentize($focus, 0.2);
+		}
 	}
+}
+.page-tbl {
+	padding: 0;
 }
 
 /* Fixed elements in a page */

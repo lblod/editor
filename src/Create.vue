@@ -3,15 +3,15 @@
     <div class="header">
       <div class="page-container">
         <nav>
-          <a href="#" :class="{active:!json&&wizard>=0}" @click.prevent="create">Nieuw</a>
-          <a href="#" :class="{active:!json&&wizard<0}" @click.prevent="json=0">Editor</a>
-          <a href="#" :class="{active:json==1}" @click.prevent="json=1">Model</a>
-          <a href="#" :class="{active:json==2}" @click.prevent="json=2">JSON-LD</a>
+          <a href="#" :class="{active:mode==0}" @click.prevent="mode=0">Nieuw</a>
+          <a href="#" :class="{active:mode==1}" @click.prevent="mode=1">Editor</a>
+          <a href="#" :class="{active:mode==2}" @click.prevent="mode=2">Model</a>
+          <a href="#" :class="{active:mode==3}" @click.prevent="mode=3">JSON-LD</a>
         </nav>
       </div>
     </div>
     <div class="page-container">
-      <div class="page" v-if="!json">
+      <div class="page" v-if="mode<2">
         <header class="page-header">
           <label class="inp">
             <span class="inp-label">Orgaan</span>
@@ -46,14 +46,14 @@
           </label>
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
-        <div class="mode-editor" v-if="wizard<0">
+        <div class="mode-editor" v-if="mode==1">
           <section class="section" v-for="p in decision.p" track-by="$index">
             <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
             <lb-article v-if="p.type=='lbld:Article'" :article.sync="p"></lb-article>
             <lb-paragraph v-if="p.type!=='lbld:Article'&&!p.title" :article.sync="p"></lb-paragraph>
           </section>
         </div>
-        <div class="page-footer" v-if="wizard<0">
+        <div class="page-footer" v-if="mode==1">
           <button type="button" @click="publish">Publiceren</button>
           <a :href="url" v-text="url" target="_blank" style="margin-top: 10px;"></a>
           <span v-if="zittingOptions&&!env.advanced && env.zitting" @click="env.advanced=1" style="margin-top: 10px; opacity:.5">Meer opties...</span>
@@ -84,100 +84,102 @@
             </label>
           </div>
         </div>
-        <div v-if="wizard==0">
-          <p>
-            Kies een sjabloon om snel een besluit op te maken.
-          </p>
-          <ul>
-            <li><a href="#" @click.prevent="start(1)">Voordracht kandidaat schepen</a></li>
-            <li><a href="#" @click.prevent="start(2)">Aktename ontslag</a></li>
-          </ul>
-          <p v-if="env.zitting">
-            <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
-          </p>
-          <p v-else>
-            Kies een orgaan & zitting
-          </p>
-        </div>
-        <div v-if="wizard==1">
-          <label class="inp">
-            <span class="inp-label">Kandidaat-schepen</span>
-            <input class="inp-text" type="text" v-model="data.kname" @input="subj(data.kname)" placeholder="Voornaam + familienaam">
-          </label>
-          <label class="inp">
-            <span class="inp-label">Einddatum van mandaat</span>
-            <input class="inp-text inp-date" type="date" v-model="data.kdate">
-          </label>
-          <br>
-          <div v-if="data.p">
+        <div class="mode-create" v-if="mode==0">
+          <div v-if="wizard==0">
+            <p>
+              Kies een sjabloon om snel een besluit op te maken.
+            </p>
+            <ul>
+              <li><a href="#" @click.prevent="start(1)">Voordracht kandidaat schepen</a></li>
+              <li><a href="#" @click.prevent="start(2)">Aktename ontslag</a></li>
+            </ul>
+            <p v-if="env.zitting">
+              <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
+            </p>
+            <p v-else>
+              Kies een orgaan & zitting
+            </p>
+          </div>
+          <div v-if="wizard==1">
             <label class="inp">
-              <span class="inp-label">Te vervangen schepen</span>
-              <input class="inp-text" type="text" v-model="data.prev" placeholder="Voornaam + familienaam">
+              <span class="inp-label">Kandidaat-schepen</span>
+              <input class="inp-text" type="text" v-model="data.kname" @input="subj(data.kname)" placeholder="Voornaam + familienaam">
             </label>
             <label class="inp">
               <span class="inp-label">Einddatum van mandaat</span>
-              <input class="inp-text inp-date" type="date" v-model="data.end">
+              <input class="inp-text inp-date" type="date" v-model="data.kdate">
             </label>
+            <br>
+            <div v-if="data.p">
+              <label class="inp">
+                <span class="inp-label">Te vervangen schepen</span>
+                <input class="inp-text" type="text" v-model="data.prev" placeholder="Voornaam + familienaam">
+              </label>
+              <label class="inp">
+                <span class="inp-label">Einddatum van mandaat</span>
+                <input class="inp-text inp-date" type="date" v-model="data.end">
+              </label>
+              <label class="inp">
+                <span class="inp-label">Reden van vervanging</span>
+                <input class="inp-text" type="text" v-model="data.reason">
+              </label>
+            </div>
+            <div v-else>
+              <a href="#" @click.prevent="data.p=true">Te vervangen schepen</a>
+            </div>
+            <br>
+            <div v-if="data.o1">
+              <label class="inp">
+                <span class="inp-label">Opvolger</span>
+                <input class="inp-text" type="text" v-model="data.o1name" placeholder="Voornaam + familienaam">
+              </label>
+              <label class="inp">
+                <span class="inp-label">Einddatum van mandaat</span>
+                <input class="inp-text inp-date" type="date" v-model="data.o1date">
+              </label>
+            </div>
+            <div v-else>
+              <a href="#" @click.prevent="data.o1=true">Opvolger</a>
+            </div>
+            <br>
+            <div v-if="data.o2">
+              <label class="inp">
+                <span class="inp-label">Tweede opvolger</span>
+                <input class="inp-text" type="text" v-model="data.o2name" placeholder="Voornaam + familienaam">
+              </label>
+              <label class="inp">
+                <span class="inp-label">Einddatum van mandaat</span>
+                <input class="inp-text inp-date" type="date" v-model="data.o2date">
+              </label>
+            </div>
+            <div v-if="data.o1&&!data.o2">
+              <a href="#" @click.prevent="data.o2=true">Tweede opvolger</a>
+            </div>
+          </div>
+          <div v-if="wizard==2">
             <label class="inp">
-              <span class="inp-label">Reden van vervanging</span>
-              <input class="inp-text" type="text" v-model="data.reason">
+              <span class="inp-label">Ontslagnemer</span>
+              <input class="inp-text" type="text" v-model="data.pname" @input="subj(data.pname)" placeholder="Voornaam + familienaam">
             </label>
-          </div>
-          <div v-else>
-            <a href="#" @click.prevent="data.p=true">Te vervangen schepen</a>
-          </div>
-          <br>
-          <div v-if="data.o1">
             <label class="inp">
               <span class="inp-label">Opvolger</span>
-              <input class="inp-text" type="text" v-model="data.o1name" placeholder="Voornaam + familienaam">
-            </label>
-            <label class="inp">
-              <span class="inp-label">Einddatum van mandaat</span>
-              <input class="inp-text inp-date" type="date" v-model="data.o1date">
+              <input class="inp-text" type="text" v-model="data.oname" placeholder="Voornaam + familienaam">
             </label>
           </div>
-          <div v-else>
-            <a href="#" @click.prevent="data.o1=true">Opvolger</a>
+          <div v-if="wizard>0">
+            <p v-if="env.zitting">
+              <button type="button" @click="compile()">Doorgaan</button>
+            </p>
+            <p v-else>
+              Kies een orgaan & zitting
+            </p>
           </div>
-          <br>
-          <div v-if="data.o2">
-            <label class="inp">
-              <span class="inp-label">Tweede opvolger</span>
-              <input class="inp-text" type="text" v-model="data.o2name" placeholder="Voornaam + familienaam">
-            </label>
-            <label class="inp">
-              <span class="inp-label">Einddatum van mandaat</span>
-              <input class="inp-text inp-date" type="date" v-model="data.o2date">
-            </label>
-          </div>
-          <div v-if="data.o1&&!data.o2">
-            <a href="#" @click.prevent="data.o2=true">Tweede opvolger</a>
-          </div>
-        </div>
-        <div v-if="wizard==2">
-          <label class="inp">
-            <span class="inp-label">Ontslagnemer</span>
-            <input class="inp-text" type="text" v-model="data.pname" @input="subj(data.pname)" placeholder="Voornaam + familienaam">
-          </label>
-          <label class="inp">
-            <span class="inp-label">Opvolger</span>
-            <input class="inp-text" type="text" v-model="data.oname" placeholder="Voornaam + familienaam">
-          </label>
-        </div>
-        <div v-if="wizard>0">
-          <p v-if="env.zitting">
-            <button type="button" @click="compile()">Doorgaan</button>
-          </p>
-          <p v-else>
-            Kies een orgaan & zitting
-          </p>
         </div>
       </div>
-      <div class="page" v-if="json==1">
+      <div class="page" v-if="mode==2">
         <pre v-text="decision|json"></pre>
       </div>
-      <div class="page" v-if="json==2">
+      <div class="page" v-if="mode==3">
         <pre v-text="jsonld|json"></pre>
       </div>
     </div>
@@ -219,6 +221,9 @@ function bboxToWKT (bbox) {
     '@type': 'http://www.opengis.net/ont/geosparql#wktLiteral',
     '@value': '<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POLYGON(' + a + ',' + b + ',' + a + ',' + d + ',' + c + ',' + d + ',' + c + ',' + b + ',' + a + ',' + b + ')'
   }
+}
+function isDoc (obj) {
+  return obj.type == 'lbld:Decision' || obj.type == '_:MandaatVoordracht'
 }
 function inert (obj) {
   return obj && JSON.parse(JSON.stringify(obj)) || obj
@@ -417,12 +422,8 @@ var data = [
 
 export default {
   data () {
-    // Default view
-    var wizard = 0
-    var initialDecision = wizard >= 0 ? emptyDecision : sampleDecision
-
     return {
-      decision: addRefs(initialDecision),
+      decision: addRefs(emptyDecision),
       env: {
         advanced: false,
         person: CURRENT_USER,
@@ -430,11 +431,11 @@ export default {
         zitting: '_:zitting-1',
         template: 0
       },
-      json: 0,
+      mode: 0,
       render: false,
       url: null,
       template: 0,
-      wizard: wizard,
+      wizard: 0,
       data: null
     }
   },
@@ -450,6 +451,12 @@ export default {
         return []
       }
       return this.$root.fragments.filter(t => t['lbld:orgaan'] && t['lbld:orgaan']['@id'] === this.env.orgaan)
+    },
+    docs () {
+      if (!this.$root.fragments) {
+        return []
+      }
+      return this.$root.fragments.filter(isDoc)
     },
     opschrift () {
       if (!this.decision) {
@@ -523,10 +530,11 @@ export default {
     defaultZitting () {
       this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : null
     },
-    create () {
-      this.json = 0
-      this.wizard = 0
-      this.decision = addRefs(emptyDecision)
+    edit (doc) {
+      for (let key in doc) {
+        this.decision[key] = doc[key]
+      }
+      this.mode = 1
     },
     start (tpl) {
       this.env.template = tpl
@@ -538,6 +546,7 @@ export default {
       } else {
         this.wizard = tpl
         this.template = tpl
+        this.mode = 0
       }
     },
     compile () {
@@ -555,8 +564,7 @@ export default {
         this.url = null
       }
       this.decision = addRefs(decision)
-      // TODO: replace template data based on this.data[this.wizard]
-      this.json = 0
+      this.mode = 1
       this.wizard = -1
     },
     subj (s) {
