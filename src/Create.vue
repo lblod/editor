@@ -210,6 +210,16 @@ const CURRENT_USER = {
   'schema:name': 'Alfred Van Den Beele'
 }
 const BACKEND_URL = 'http://lblod.pieter.pm/'
+function bboxToWKT (bbox) {
+  if (!bbox) {
+    return null
+  }
+  var [a, b, c, d] = bbox.split(',')
+  return {
+    '@type': 'http://www.opengis.net/ont/geosparql#wktLiteral',
+    '@value': '<http://www.opengis.net/def/crs/OGC/1.3/CRS84> POLYGON(' + a + ',' + b + ',' + a + ',' + d + ',' + c + ',' + d + ',' + c + ',' + b + ',' + a + ',' + b + ')'
+  }
+}
 function inert (obj) {
   return obj && JSON.parse(JSON.stringify(obj)) || obj
 }
@@ -484,6 +494,7 @@ export default {
           }
         }
       }
+      decision['dcterms:spatial'] = bboxToWKT(this.decision['dcterms:spatial'])
       delete decision.p
       for (let key in decision) {
         if (!decision[key]) {
