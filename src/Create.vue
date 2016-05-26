@@ -77,9 +77,11 @@
             <lb-article v-if="p.type=='lbld:Article'" :article.sync="p"></lb-article>
             <lb-paragraph v-if="p.type!=='lbld:Article'&&!p.title" :article.sync="p"></lb-paragraph>
           </section>
-          <div class="page-footer" style="display:none">
-            <button type="button" @click="save">Bewaren</button>
-            <button type="button" @click="reset">Reset</button>
+        </div>
+        <div v-if="wizard<0">
+          <div class="page-footer">
+            <button type="button" @click="publish">Publiceren</button>
+            <a :href="url" v-text="url" target="_blank"></a>
           </div>
         </div>
         <div v-if="wizard==0">
@@ -177,13 +179,13 @@
       </div>
       <div class="page" v-if="json==2">
         <pre v-text="jsonld|json"></pre>
-        <div id="jsonld">
-          <section class="section" v-for="p in decision.p" track-by="$index">
-            <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
-            <div v-else v-text="p.text"></div>
-          </section>
-        </div>
       </div>
+    </div>
+    <div id="jsonld" style="display:none" v-if="render">
+      <section class="section" v-for="p in decision.p" track-by="$index">
+        <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
+        <div v-else v-text="p.text"></div>
+      </section>
     </div>
   </div>
 </template>
@@ -418,6 +420,8 @@ export default {
         template: 0
       },
       json: 0,
+      render: false,
+      url: null,
       template: 0,
       wizard: wizard,
       data: null
@@ -432,7 +436,7 @@ export default {
     },
     zittingOptions () {
       if (!this.$root.fragments || !this.env.orgaan) {
-        return
+        return []
       }
       return this.$root.fragments.filter(t => t['lbld:orgaan'] && t['lbld:orgaan']['@id'] === this.env.orgaan)
     },
@@ -497,18 +501,9 @@ export default {
       }
       delete decision.subject
       if (decision.uri) {
-        var uri = decision.uri
+        decision['@id'] = BACKEND_URL + 'decisions/' + decision.uri + '.html#decision'
+        decision['@context'].current = BACKEND_URL + 'decisions/' + decision.uri + '.html#'
         delete decision.uri
-        decision['@id'] = BACKEND_URL + 'decisions/' + uri + '.html#decision'
-        decision['@context'].current = BACKEND_URL + 'decisions/' + uri + '.html#'
-        this.$nextTick(function () {
-          var html = this.$el.querySelector('#jsonld').innerHTML
-          html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
-          this.$http.post(BACKEND_URL + 'admin/index.php', {
-            uri: uri,
-            html: html
-          })
-        })
       }
       return decision
     }
@@ -546,6 +541,7 @@ export default {
       decision['dcterms:title'] = this.data && this.data.title
       if (!decision.uri) {
         decision.uri = Date.now() % 100
+        this.url = null
       }
       this.decision = addRefs(decision)
       // TODO: replace template data based on this.data[this.wizard]
@@ -555,14 +551,20 @@ export default {
     subj (s) {
       this.decision.subject = s
     },
-    reset () {
-      window.localStorage.removeItem('decision')
-      console.log('reset localStorage')
-      window.location.reload()
-    },
-    save () {
-      window.localStorage.setItem('decision', JSON.stringify(this.decision))
-      console.log('saved in localStorage')
+    publish () {
+      this.render = true
+      this.$nextTick(function () {
+        var html = this.$el.querySelector('#jsonld').innerHTML
+        html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
+        console.log(html)
+        this.$http.post(BACKEND_URL + 'admin/index.php', {
+          uri: this.decision.uri,
+          html: html
+        }).then(function () {
+          this.url = this.jsonld['@id']
+        })
+        this.render = false
+      })
     }
   },
   events: {

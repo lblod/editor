@@ -21,7 +21,8 @@ export default {
   props: ['article', 'num'],
   computed: {
     number () {
-      return this.article['@id'].slice(this.article['@id'].indexOf('#') + 1)
+      var id = this.article['@id']
+      return id.slice(Math.max(id.lastIndexOf('-'), id.lastIndexOf('#'), id.lastIndexOf(':')) + 1)
     }
   },
   mixins: [Paragraph]

@@ -5,7 +5,7 @@ import Create from './Create.vue'
 import Fragments from './mixins/Fragments.js'
 
 Vue.use(VueResource)
-Vue.config.debug = true
+//Vue.config.debug = true
 
 new Vue({
   el: 'body',

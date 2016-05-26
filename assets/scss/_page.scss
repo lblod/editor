@@ -45,6 +45,10 @@
 		background: white;
 		color: $focus;
 	}
+	a {
+		margin-left: 1em;
+		color: inherit;
+	}
 }
 @media (min-width: 50em) {
 	.page-header {
