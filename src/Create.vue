@@ -208,7 +208,7 @@ const CURRENT_USER = {
   '@type': 'schema:Person',
   'schema:name': 'Alfred Van Den Beele'
 }
-const BACKEND_URL = 'http://dev.thomasg.be/'
+const BACKEND_URL = 'http://lblod.pieter.pm/'
 function inert (obj) {
   return obj && JSON.parse(JSON.stringify(obj)) || obj
 }
