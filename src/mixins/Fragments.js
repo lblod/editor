@@ -301,6 +301,13 @@ export default {
         text: 'Districtsraad'
       }, {
         type: 'lbld:Orgaan',
+        id: '_:orgaan-gemeenteraad-bertem',
+        text: 'Gemeenteraad Bertem',
+        'lbld:type': {
+          '@id': '_:orgaan-gemeenteraad'
+        }
+      }, {
+        type: 'lbld:Orgaan',
         id: '_:orgaan-gemeenteraad-kortrijk',
         text: 'Gemeenteraad Kortrijk',
         'lbld:type': {
@@ -308,19 +315,15 @@ export default {
         }
       }, {
         type: 'lbld:Orgaan',
+        id: '_:orgaan-gemeenteraad-niel',
+        text: 'Gemeenteraad Niel',
+        'lbld:type': {
+          '@id': '_:orgaan-gemeenteraad'
+        }
+      }, {
+        type: 'lbld:Orgaan',
+        id: '_:orgaan-gemeenteraad-scheveninge',
         text: 'Gemeenteraad Scheveninge',
-        'lbld:type': {
-          '@id': '_:orgaan-gemeenteraad'
-        }
-      }, {
-        type: 'lbld:Orgaan',
-        text: 'Gemeenteraad Affligem',
-        'lbld:type': {
-          '@id': '_:orgaan-gemeenteraad'
-        }
-      }, {
-        type: 'lbld:Orgaan',
-        text: 'Gemeenteraad Roeselare',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
         }
@@ -350,6 +353,34 @@ export default {
         date: '2016-03-23',
         'lbld:orgaan': {
           '@id': '_:orgaan-gemeenteraad-kortrijk'
+        }
+      }, {
+        type: 'lbld:Zitting',
+        text: 'Zitting op 25 mei',
+        date: '2016-05-25',
+        'lbld:orgaan': {
+          '@id': '_:orgaan-gemeenteraad-bertem'
+        }
+      }, {
+        type: 'lbld:Zitting',
+        text: 'Zitting op 23 maart',
+        date: '2016-03-23',
+        'lbld:orgaan': {
+          '@id': '_:orgaan-gemeenteraad-bertem'
+        }
+      }, {
+        type: 'lbld:Zitting',
+        text: 'Zitting op 25 mei',
+        date: '2016-05-25',
+        'lbld:orgaan': {
+          '@id': '_:orgaan-gemeenteraad-niel'
+        }
+      }, {
+        type: 'lbld:Zitting',
+        text: 'Zitting op 23 maart',
+        date: '2016-03-23',
+        'lbld:orgaan': {
+          '@id': '_:orgaan-gemeenteraad-niel'
         }
       }, {
         type: 'lbld:Decision',
