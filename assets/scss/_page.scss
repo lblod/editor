@@ -52,6 +52,9 @@
 		font: inherit;
 		background: white;
 		color: $focus;
+		&:hover {
+			background: transparentize(white, 0.2);
+		}
 	}
 	a {
 		color: inherit;
