@@ -57,7 +57,7 @@
 .inp-select {
 	-webkit-appearance: none;
 	appearance: none;
-	option {
+	option, optgroup {
 		color: black;
 	}
 }
