@@ -655,14 +655,25 @@ export default {
       this.decision[prop] = value
     },
     append (article) {
-      for (var s = 0; s < this.decision.p.length; s++) {
-          if (this.decision.p[s] === article) {
+      let obj = this.decision
+      for (var s = 0; s < obj.p.length; s++) {
+          if (obj.p[s] === article) {
             var a = inert(EMPTY_ARTICLE)
             a.type = article.type
             a.context = article.context
-            this.decision.p.splice(s + 1, 0, a)
-            return
+            obj.p.splice(s + 1, 0, a)
+            break
           }
+      }
+      // Article numbering
+      var counter = 0
+      for (var i = 0; i < obj.p.length; i++) {
+        if (obj.p[i].title && obj.p[i].context === 'lbld:decision') {
+          counter = 1
+        } else if (counter) {
+          obj.p[i]['@id'] = 'current:article-' + counter
+          counter++
+        }
       }
     },
     rm (article) {
