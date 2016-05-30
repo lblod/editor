@@ -51,7 +51,7 @@ export default {
       if (this.term && this.prop) {
         var prop = this.$root.map[this.prop]
         console.log(fragments)
-        fragments = fragments.filter(f => prop.range.includes(f.type)).map(p => p['id'])
+        fragments = fragments.filter(f => prop.range.includes(f.type))
       }
       fuseOptions.id = 'id'
       fuseOptions.keys = ['text']

@@ -47,9 +47,7 @@
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
         <div class="mode-editor" v-if="mode==1">
-          <section class="section" v-for="p in decision.p" track-by="$index">
-            <div :is="component(p)" :article.sync="p"></div>
-          </section>
+          <div v-for="p in decision.p" track-by="$index" :is="component(p)" :article.sync="p"></div>
         </div>
         <div class="page-footer" v-if="mode==1">
           <button type="button" @click="publish">Publiceren</button>
@@ -110,20 +108,20 @@
             <br>
             <div v-if="data.p">
               <label class="inp">
-                <span class="inp-label">Te vervangen schepen</span>
-                <input class="inp-text" type="text" v-model="data.prev" placeholder="Voornaam + familienaam">
+                <span class="inp-label">Ontslagnemend schepen</span>
+                <input class="inp-text" type="text" v-model="data.pname" placeholder="Voornaam + familienaam">
               </label>
               <label class="inp">
                 <span class="inp-label">Einddatum van mandaat</span>
-                <input class="inp-text inp-date" type="date" v-model="data.end">
+                <input class="inp-text inp-date" type="date" v-model="data.pdate">
               </label>
               <label class="inp">
                 <span class="inp-label">Reden van vervanging</span>
-                <input class="inp-text" type="text" v-model="data.reason">
+                <input class="inp-text" type="text" v-model="data.preason">
               </label>
             </div>
             <div v-else>
-              <a href="#" @click.prevent="data.p=true">Te vervangen schepen</a>
+              <a href="#" @click.prevent="data.p=true">Ontslagnemend schepen</a>
             </div>
             <br>
             <div v-if="data.o1">
@@ -196,9 +194,11 @@
 // notule > besluiten > artikels
 import '../assets/scss/main.scss'
 import InputSpatial from './components/InputSpatial.vue'
-import LbTitle from './components/LbTitle.vue'
 import LbArticle from './components/LbArticle.vue'
+import LbLegal from './components/LbLegal.vue'
 import LbParagraph from './components/LbParagraph.vue'
+import LbSubtitle from './components/LbSubtitle.vue'
+import LbTitle from './components/LbTitle.vue'
 import TextareaGrowing from './components/TextareaGrowing.vue'
 
 const EMPTY_ARTICLE = {
@@ -284,163 +284,193 @@ var emptyDecision = {
 }
 // Templates paragraphs
 var templates = [
-  [{
-    title: 'Aanleiding'
-  }, {
-    text: ''
-  }, {
-    title: 'Motivatie',
-    context: 'lbld:motivation'
-  }, {
-    '@id': '',
-    text: ''
-  }, {
-    title: 'Juridische grond'
-  }, {
-    text: '',
-    context: 'lbld:legalBackground'
-  }, {
-    title: 'Besluit',
-    context: 'lbld:decision'
-  }, {
-    '@id': '',
-    'type': 'lbld:Article',
-    text: ''
-  }, {
-    title: 'Bijlagen'
-  }, {
-    text: ''
-  }],
-  [{
-    title: 'Voorgeschiedenis'
-  }, {
-    text: ''
-  }, {
-    title: 'Feiten en context'
-  }, {
-    '@id': '',
-    text: ''
-  }, {
-    title: 'Juridische gronden',
-    context: 'lbld:legalBackground'
-  }, {
-    text: 'Gemeentedecreet Artikel 14 1°',
-    context: 'lbld:legalBackground',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet-14',
-      }
-    }]
-  }, {
-    text: 'Gemeentedecreet Artikel 16',
-    context: 'lbld:legalBackground',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet-16',
-      }
-    }]
-  }, {
-    text: 'Gemeentedecreet Artikel 169, § 2, ',
-    context: 'lbld:legalBackground',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:kiesdecreet-169',
-      }
-    }]
-  }, {
-    title: 'Besluit',
-    context: 'lbld:decision'
-  }, {
-    '@id': '',
-    'type': 'lbld:Article',
-    text: ''
-  }, {
-    title: 'Bijlagen'
-  }, {
-    text: ''
-  }],
-  [{
-    title: 'Aanleiding'
-  }, {
-    text: '{{pname}} liet weten dat hij ontslag neemt als gemeenteraadslid.'
-  }, {
-    title: 'Motivatie',
-    context: 'lbld:Motivation'
-  }, {
-    '@id': '',
-    text: 'Volgens het proces-verbaal van het hoofdstembureau van Kortrijk houdende vaststelling van de zetelverdeling tussen de lijsten en van de rangorde van de raadsleden en hun opvolgers, d.d. 14 oktober 2012, zoals geldig verklaard bij besluit van de Raad voor Verkiezingsbetwistingen van 21 december 2012, is {{oname}} de eerste opvolger.'
-  }, {
-    '@id': '',
-    text: '',
-  }, {
-    '@id': '',
-    context: 'lbld:legalBackground',
-    text: '{{oname}} gaat over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet-7',
-      }
-    }]
-  }, {
-    title: 'Juridische grond'
-  }, {
-    text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
-    context: 'lbld:legalBackground',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:kiesdecreet',
-      }
+  function () {
+    return [{
+      title: 'Motivering, feiten en context',
+      context: 'lbld:motivation'
     }, {
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet'
-      }
-    }]
-  }, {
-    title: 'Bevoegdheid'
-  }, {
-    text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
-    context: 'lbld:legalBackground',
-    refs: [{
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet-42'
-      }
+      '@id': '',
+      text: ''
     }, {
-      prop: 'lbld:legalBackground',
-      value: {
-        '@id': '_:gemeentedecreet-43'
-      }
+      title: 'Juridische gronden'
+    }, {
+      text: ''
+    }, {
+      title: 'Besluit',
+      context: 'lbld:decision'
+    }, {
+      '@id': '',
+      'type': 'lbld:Article',
+      text: ''
+    }, {
+      title: 'Bijlagen'
+    }, {
+      text: ''
     }]
-  }, {
-    title: 'Besluit',
-    context: 'lbld:decision'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '',
-    text: 'De geloofsbrieven van {{oname}} goed te keuren.'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '',
-    text: 'Akte te nemen van het proces-verbaal van eedaflegging van {{oname}}.'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '',
-    text: '{{oname}} te installeren als gemeenteraadslid.'
-  }, {
-    'type': 'lbld:Article',
-    '@id': '',
-    text: 'Huidige beslissing binnen de twintig dagen mee te delen aan de Vlaamse Regering.'
-  }, {
-    title: 'Bijlagen'
-  }, {
-    text: ''
-  }]
+  },
+  function (data) {
+    var p = [{
+      title: 'Juridische gronden',
+      context: 'lbld:legalBackground'
+    }, {
+      title: 'Bevoegdheid',
+      subtitle: true
+    }, {
+      text: 'Gelet op Artikel 7, §3 van het Gemeentedecreet van 15 juli 2005'
+    }, {
+      title: 'Hogere rechtsnormen',
+      context: 'lbld:legalBackground',
+      subtitle: true
+    }, {
+      text: 'Gelet op Artikel 11 van het Gemeentedecreet van 15 juli 2005'
+    }, {
+      text: 'Gelet op Artikel 12 van het Gemeentedecreet van 15 juli 2005'
+    }, {
+      text: 'Gelet op Artikel 15 van het Gemeentedecreet van 15 juli 2005'
+    }, {
+      text: 'Gelet op Artikel 16 van het Gemeentedecreet van 15 juli 2005'
+    }, {
+      text: 'Gelet op Artikel 8-14 van het Lokaal en Provinciaal Kiesdecreet van 8 juli 2011\nOm gemeenteraadskiezer te zijn, moet men de leeftijd van achttien jaar hebben bereikt, in de bevolkingsregisters van de gemeente ingeschreven zijn en zich niet bevinden in één van de gevallen van uitsluiting of schorsing.'
+    }, {
+      text: 'Gelet op Artikel 58 van het Lokaal en Provinciaal Kiesdecreet van 8 juli 2011\nOm tot gemeenteraadslid verkozen te kunnen worden en blijven, moet men kiezer zijn en moet men de kiesvoorwaarden behouden en mag men zich niet in een geval van schorsing of uitsluiting bevinden. Dit artikel omschrijft verder ook de situaties waarin personen niet verkiesbaar zijn als gemeenteraadslid.'
+    }, {
+      text: 'Gelet op Artikel 169, §2, 5° van het Lokaal en Provinciaal Kiesdecreet van 8 juli 2011\nDe niet-verkozen kandidaten worden eerste, tweede, derde enzovoort opvolger verklaard in afnemende grootte van het aantal stemmen dat zij hebben bekomen, na een nieuwe overdracht van de lijststemmen, te beginnen bij de eerste niet-effectief verkozen kandidaat.'
+    }, {
+      text: 'Gelet op Omzendbrief BB-2012/2 van 19 oktober 2012 – Start van de lokale en provinciale bestuursperiode\nDeze omzendbrief geeft o.a. toelichting bij het onderzoek van de geloofsbrieven.'
+    }, {
+      title: 'Motivering, feiten en context'
+    }, {
+      '@id': '',
+      text: '',
+      placeholder: 'Geef aan wanneer de relevante gemeenteraadsverkiezingen werden goedgekeurd'
+    }, {
+      '@id': '',
+      text: '',
+      placeholder: 'Geef aan wanneer de betrokkene de eedaflegging heeft afgelegd'
+    }, {
+      '@id': '',
+      text: '',
+      placeholder: 'Geef aan hoe en wanneer de betrokkene schriftelijk ontslag heeft meegedeeld aan de voorzitter'
+    }, {
+      '@id': '',
+      text: 'De voorzitter nam kennis van het ontslag van gemeenteraadslid {{pname}} op {{pdate}}. Door deze kennisname is het ontslag definitief. De raad kan hier enkel akte van nemen.'
+    }, {
+      '@id': '',
+      text: 'Uit het proces-verbaal van het gemeentelijk hoofdbureau blijkt dat {{o1name}} eerste opvolger voor de lijst "{{o1lijst}}" is.'
+    }, {
+      '@id': '',
+      text: 'De geloofsbrieven van {{o1name}} werden behoorlijk en tijdig ingediend en werden ter inzage gelegd met respect voor de decretale bepalingen.'
+    }, {
+      '@id': '',
+      text: 'Uit het onderzoek van de geloofsbrieven van de verkozen gemeenteraadsleden door de gemeenteraad, zoals voorgeschreven in artikel 7, §2 en artikel 10 van het Gemeentedecreet, blijkt dat {{o1name}} voldoet aan de verkiesbaarheidsvoorwaarden.'
+    }, {
+      '@id': '',
+      text: 'Mathias Van Compernolle heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
+    }, {
+      title: 'Besluit',
+      context: 'lbld:decision'
+    }, {
+      '@id': '',
+      'type': 'lbld:Article',
+      text: ''
+    }, {
+      title: 'Bijlagen'
+    }, {
+      text: ''
+    }]
+    return p
+  },
+  function () {
+    return [{
+      title: 'Aanleiding'
+    }, {
+      text: '{{pname}} liet weten dat hij ontslag neemt als gemeenteraadslid.'
+    }, {
+      title: 'Motivatie',
+      context: 'lbld:Motivation'
+    }, {
+      '@id': '',
+      text: 'Volgens het proces-verbaal van het hoofdstembureau van Kortrijk houdende vaststelling van de zetelverdeling tussen de lijsten en van de rangorde van de raadsleden en hun opvolgers, d.d. 14 oktober 2012, zoals geldig verklaard bij besluit van de Raad voor Verkiezingsbetwistingen van 21 december 2012, is {{oname}} de eerste opvolger.'
+    }, {
+      '@id': '',
+      text: '',
+    }, {
+      '@id': '',
+      context: 'lbld:legalBackground',
+      text: '{{oname}} gaat over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.',
+      refs: [{
+        prop: 'lbld:legalBackground',
+        value: {
+          '@id': '_:gemeentedecreet-7',
+        }
+      }]
+    }, {
+      title: 'Juridische grond'
+    }, {
+      text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
+      context: 'lbld:legalBackground',
+      refs: [{
+        prop: 'lbld:legalBackground',
+        value: {
+          '@id': '_:kiesdecreet',
+        }
+      }, {
+        prop: 'lbld:legalBackground',
+        value: {
+          '@id': '_:gemeentedecreet'
+        }
+      }]
+    }, {
+      title: 'Bevoegdheid'
+    }, {
+      text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
+      context: 'lbld:legalBackground',
+      refs: [{
+        prop: 'lbld:legalBackground',
+        value: {
+          '@id': '_:gemeentedecreet-42'
+        }
+      }, {
+        prop: 'lbld:legalBackground',
+        value: {
+          '@id': '_:gemeentedecreet-43'
+        }
+      }]
+    }, {
+      title: 'Besluit',
+      context: 'lbld:decision'
+    }, {
+      'type': 'lbld:Article',
+      '@id': '',
+      text: 'De raad neemt kennis van het ontslag van raadslid {{pname}}.'
+    }, {
+      'type': 'lbld:Article',
+      '@id': '',
+      text: 'Artikel 2:  De raad keurt de geloofsbrieven van {{oname}} goed.'
+    }, {
+      'type': 'lbld:Article',
+      '@id': '',
+      text: 'Artikel 3: De raad neemt kennis van de eedaflegging van {{oname}} in handen van de voorzitter van de gemeenteraad.'
+    }, {
+      title: 'Bijlagen'
+    }, {
+      text: 'Mandaatvoordracht',
+      refs: [{
+        prop: 'mandaat:exit',
+        value: {
+          '@id': 'nope'
+        }
+      }, {
+        prop: 'mandaat:init',
+        value: {
+          'mandaat:position': 'eerste schepen',
+          'schema:person': null,
+          'schema:startDate': null,
+          'schema:endDate': null,
+        }
+      }]
+    }]
+  }
 ]
 // Template data
 var data = [
@@ -458,6 +488,7 @@ var data = [
     o1: false,
     o1name: '',
     o1date: '',
+    o1lijst: 'VlaVirGem feest',
     o2: false,
     o2name: '',
     o2date: '',
@@ -469,6 +500,20 @@ var data = [
     oname: ''
   }
 ]
+var opschrift = [
+  null,
+  function (data) {
+    if (!data) return;
+    var subj = []
+    if (data.pname) {
+      subj.push('de kennisname van het ontslag van raadslid ' + data.pname)
+    }
+    if (data.kname) {
+      subj.push('de installatie van opvolger ' + data.kname)
+    }
+    return subj ? 'betreffende ' + subj.join(' en ') : ''
+  }
+]
 
 export default {
   data () {
@@ -477,14 +522,13 @@ export default {
       env: {
         advanced: false,
         person: CURRENT_USER,
-        orgaan: '',
+        orgaan: '_:orgaan-gemeenteraad-vlavirgem',
         zitting: '_:zitting-1',
         template: 0
       },
       mode: 0,
       render: false,
       url: null,
-      template: 0,
       wizard: 0,
       data: null
     }
@@ -514,9 +558,10 @@ export default {
       }
       var d = inert(data[this.env.template])
       var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
-      var orgId = zit && zit['lbld:orgaan'] && zit['lbld:orgaan']['@id'] || this.env.orgaan
-      var org = this.$root.fragments.find(o => orgId === o.id)
-      return [org && org.text, zit && zit.date, d && d.title, this.decision.subject].filter(Boolean).join(' - ')
+      if (opschrift[this.env.template]) {
+        return 'Gemeenteraadsbesluit van ' + (zit && zit.date || 'datum') + ' ' + opschrift[this.env.template](this.data)
+      }
+      return ['Gemeenteraadsbesluit van ' + (zit && zit.date || 'datum'), d && d.title, this.decision.subject].filter(Boolean).join(' - ')
     },
     jsonld () {
       var decision = inert(this.decision);
@@ -581,9 +626,14 @@ export default {
       this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : null
     },
     component (p) {
-      console.log(p)
+      if (p.subtitle) {
+        return 'LbSubtitle'
+      }
       if (p.title) {
         return 'LbTitle'
+      }
+      if (p.text && p.text.startsWith('Gelet op')) {
+        return 'LbLegal'
       }
       if (p.type == 'lbld:Article') {
         return 'LbArticle'
@@ -608,13 +658,13 @@ export default {
         this.compile(tpl)
       } else {
         this.wizard = tpl
-        this.template = tpl
+        this.env.template = tpl
         this.mode = 0
       }
     },
     compile () {
       var decision = inert(emptyDecision)
-      decision.p = inert(templates[this.wizard])
+      decision.p = inert(templates[this.wizard](this.data))
       for (let key in this.data) {
         for (var i = 0; i < decision.p.length; i++) {
           if ( decision.p[i].text)
@@ -628,7 +678,6 @@ export default {
       }
       this.decision = addRefs(decision)
       this.mode = 1
-      this.wizard = -1
     },
     subj (s) {
       this.decision.subject = s
@@ -636,7 +685,9 @@ export default {
     publish () {
       this.render = true
       this.$nextTick(function () {
-        var html = this.$el.querySelector('#jsonld').innerHTML
+        var html = '<!DOCTYPE html><html lang="nl"><head><meta charset="utf-8">'
+        html += '<title>' + opschrift + ' - LBLOD</title></head><body>'
+        html += this.$el.querySelector('#jsonld').innerHTML
         html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
         console.log(html)
         this.$http.post(BACKEND_URL + 'admin/index.php', {
@@ -692,7 +743,9 @@ export default {
   components: {
     InputSpatial,
     LbArticle,
+    LbLegal,
     LbParagraph,
+    LbSubtitle,
     LbTitle,
     TextareaGrowing
   }

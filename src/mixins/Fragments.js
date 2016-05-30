@@ -1632,8 +1632,8 @@ export default {
         text: 'Districtsraad'
       }, {
         type: 'lbld:Orgaan',
-        id: '_:orgaan-gemeenteraad-bertem',
-        text: 'Gemeenteraad Bertem',
+        id: '_:orgaan-gemeenteraad-vlavirgem',
+        text: 'Gemeenteraad VlaVirGem',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
         }
@@ -1671,33 +1671,33 @@ export default {
           '@id': '_:orgaan-districtsraad'
         }
       }, {
+        type: 'lbld:Zitting',
+        text: 'Zitting op 25 mei',
+        date: '2016-05-25',
+        'lbld:orgaan': {
+          '@id': '_:orgaan-gemeenteraad-kortrijk'
+        }
+      }, {
+        type: 'lbld:Zitting',
+        text: 'Zitting op 23 maart',
+        date: '2016-03-23',
+        'lbld:orgaan': {
+          '@id': '_:orgaan-gemeenteraad-kortrijk'
+        }
+      }, {
         id: '_:zitting-1',
         type: 'lbld:Zitting',
         text: 'Zitting op 25 mei',
         date: '2016-05-25',
         'lbld:orgaan': {
-          '@id': '_:orgaan-gemeenteraad-kortrijk'
+          '@id': '_:orgaan-gemeenteraad-vlavirgem'
         }
       }, {
         type: 'lbld:Zitting',
         text: 'Zitting op 23 maart',
         date: '2016-03-23',
         'lbld:orgaan': {
-          '@id': '_:orgaan-gemeenteraad-kortrijk'
-        }
-      }, {
-        type: 'lbld:Zitting',
-        text: 'Zitting op 25 mei',
-        date: '2016-05-25',
-        'lbld:orgaan': {
-          '@id': '_:orgaan-gemeenteraad-bertem'
-        }
-      }, {
-        type: 'lbld:Zitting',
-        text: 'Zitting op 23 maart',
-        date: '2016-03-23',
-        'lbld:orgaan': {
-          '@id': '_:orgaan-gemeenteraad-bertem'
+          '@id': '_:orgaan-gemeenteraad-vlavirgem'
         }
       }, {
         type: 'lbld:Zitting',

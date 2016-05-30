@@ -77,11 +77,6 @@
 
 /* Variable elements in a page */
 
-.page {
-	h1 {
-		font-size: 1.5em;
-	}
-}
 .section {}
 .section-refs {
 	margin-top: 1rem;
@@ -90,7 +85,15 @@
 .article {
 	position: relative;
 	padding: 0 3rem;
-	margin: 0 -3rem 1rem;
+	margin: 0.3rem -3rem 1rem;
+	font-size: 14px;
+}
+.article-legal {
+	margin: 0.3rem -3rem;
+}
+.article-empty textarea {
+	outline-offset: -1px;
+	outline: 2px auto red;
 }
 .article-numbered {
 	margin-top: 1rem;
@@ -104,6 +107,14 @@
 	display: block;
 	font-size: 12px;
 	pointer-events: none;
+}
+.article-expand {
+	float: left;
+	line-height: 30px;
+}
+.article-legal .article-text {
+	margin-left: 1.5rem;
+	max-width: 40.75rem;
 }
 .article-tools {
 	position: absolute;
@@ -177,22 +188,22 @@
 	}
 }
 @media (min-width: 70em) {
-		.mode-editor {
-			width: calc(21rem + 50vw);
+	.mode-editor {
+		width: calc(21rem + 50vw);
+	}
+	.article-text {
+		width: 42rem;
+	}
+	.article {
+		margin-right: 0;
+		padding-right: 0;
+		&::after,
+		&::before {
+			clear: both;
+			content: '';
+			display: table;
 		}
-		.article-text {
-			width: 42rem;
-		}
-		.article {
-			margin-right: 0;
-			padding-right: 0;
-			&::after,
-			&::before {
-				clear: both;
-				content: '';
-				display: table;
-			}
-		}
+	}
 	.article-float {
 		.p-ref {
 			float: right;

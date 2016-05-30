@@ -1,7 +1,11 @@
 .item-lookup {
+	font-size: 14px;
+	line-height: 18px;
 	max-width: 42rem;
 	input {
 		min-width: 15em;
+		border: 0;
+		border-bottom: 1px solid;
 	}
 	a {
 		color: $focus;
@@ -16,5 +20,5 @@
 .item-toggle {
 	cursor: pointer;
 	text-decoration: underline;
-	color: #666;
+	color: #999;
 }

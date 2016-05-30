@@ -4,15 +4,18 @@ import ItemLookup from '../components/ItemLookup.vue'
 import TextareaGrowing from '../components/TextareaGrowing.vue'
 
 export default {
-	computed: {
-		prop () {
-			return 'blub'
-		},
+  computed: {
+    prop () {
+      return 'blub'
+    },
     float () {
       return this.article.context !== 'lbld:legalBackground'
+    },
+    legal () {
+      return this.article.text.slice(0, 7) === 'Gelet op'
     }
-	},
-	methods: {
+  },
+  methods: {
     enter (evt) {
       if (evt.crtlKey || evt.shiftKey) {
         return
@@ -25,7 +28,7 @@ export default {
         this.$dispatch('append', this.article)
         evt.preventDefault()
         this.$nextTick(function () {
-          this.$el.parentElement.nextElementSibling.querySelector('textarea').focus()
+          this.$el.nextElementSibling.querySelector('textarea').focus()
         })
       }
     },
@@ -35,7 +38,14 @@ export default {
     rm () {
       this.$dispatch('rm', this.article)
     }
-	},
+  },
+  attached () {
+    if (!this.$root.keepFocus) {
+      return
+    }
+    var inp = this.$el.querySelector('textarea')
+    inp && inp.focus()
+  },
   components: {
     InputRef,
     ItemRef,
