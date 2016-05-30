@@ -48,9 +48,7 @@
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
         <div class="mode-editor" v-if="mode==1">
           <section class="section" v-for="p in decision.p" track-by="$index">
-            <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
-            <lb-article v-if="p.type=='lbld:Article'" :article.sync="p"></lb-article>
-            <lb-paragraph v-if="p.type!=='lbld:Article'&&!p.title" :article.sync="p"></lb-paragraph>
+            <div :is="component(p)" :article.sync="p"></div>
           </section>
         </div>
         <div class="page-footer" v-if="mode==1">
@@ -189,6 +187,7 @@
         <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
         <div v-else v-text="p.text"></div>
       </section>
+      <script type="application/json" v-html="decision|json"></script>
     </div>
   </div>
 </template>
@@ -197,6 +196,7 @@
 // notule > besluiten > artikels
 import '../assets/scss/main.scss'
 import InputSpatial from './components/InputSpatial.vue'
+import LbTitle from './components/LbTitle.vue'
 import LbArticle from './components/LbArticle.vue'
 import LbParagraph from './components/LbParagraph.vue'
 import TextareaGrowing from './components/TextareaGrowing.vue'
@@ -298,6 +298,7 @@ var templates = [
     title: 'Juridische grond'
   }, {
     text: '',
+    context: 'lbld:legalBackground'
   }, {
     title: 'Besluit',
     context: 'lbld:decision'
@@ -311,7 +312,53 @@ var templates = [
     text: ''
   }],
   [{
-    title: 'Dit is geen beluit?'
+    title: 'Voorgeschiedenis'
+  }, {
+    text: ''
+  }, {
+    title: 'Feiten en context'
+  }, {
+    '@id': '',
+    text: ''
+  }, {
+    title: 'Juridische gronden',
+    context: 'lbld:legalBackground'
+  }, {
+    text: 'Gemeentedecreet Artikel 14 1°',
+    context: 'lbld:legalBackground',
+    refs: [{
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet-14',
+      }
+    }]
+  }, {
+    text: 'Gemeentedecreet Artikel 16',
+    context: 'lbld:legalBackground',
+    refs: [{
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:gemeentedecreet-16',
+      }
+    }]
+  }, {
+    text: 'Gemeentedecreet Artikel 169, § 2, ',
+    context: 'lbld:legalBackground',
+    refs: [{
+      prop: 'lbld:legalBackground',
+      value: {
+        '@id': '_:kiesdecreet-169',
+      }
+    }]
+  }, {
+    title: 'Besluit',
+    context: 'lbld:decision'
+  }, {
+    '@id': '',
+    'type': 'lbld:Article',
+    text: ''
+  }, {
+    title: 'Bijlagen'
   }, {
     text: ''
   }],
@@ -330,17 +377,19 @@ var templates = [
     text: '',
   }, {
     '@id': '',
+    context: 'lbld:legalBackground',
     text: '{{oname}} gaat over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.',
     refs: [{
       prop: 'lbld:legalBackground',
       value: {
-        '@id': '_:gemeentedecreet#7.3',
+        '@id': '_:gemeentedecreet-7',
       }
     }]
   }, {
     title: 'Juridische grond'
   }, {
     text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
+    context: 'lbld:legalBackground',
     refs: [{
       prop: 'lbld:legalBackground',
       value: {
@@ -356,15 +405,16 @@ var templates = [
     title: 'Bevoegdheid'
   }, {
     text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
+    context: 'lbld:legalBackground',
     refs: [{
       prop: 'lbld:legalBackground',
       value: {
-        '@id': '_:gemeentedecreet#42'
+        '@id': '_:gemeentedecreet-42'
       }
     }, {
       prop: 'lbld:legalBackground',
       value: {
-        '@id': '_:gemeentedecreet#43'
+        '@id': '_:gemeentedecreet-43'
       }
     }]
   }, {
@@ -530,6 +580,19 @@ export default {
     defaultZitting () {
       this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : null
     },
+    component (p) {
+      console.log(p)
+      if (p.title) {
+        return 'LbTitle'
+      }
+      if (p.type == 'lbld:Article') {
+        return 'LbArticle'
+      }
+      if (p.context == 'lbld:legalBackground') {
+        // return 'Lblegal'
+      }
+      return 'LbParagraph'
+    },
     edit (doc) {
       for (let key in doc) {
         this.decision[key] = doc[key]
@@ -596,6 +659,7 @@ export default {
           if (this.decision.p[s] === article) {
             var a = inert(EMPTY_ARTICLE)
             a.type = article.type
+            a.context = article.context
             this.decision.p.splice(s + 1, 0, a)
             return
           }
@@ -618,6 +682,7 @@ export default {
     InputSpatial,
     LbArticle,
     LbParagraph,
+    LbTitle,
     TextareaGrowing
   }
 }

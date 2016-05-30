@@ -1,12 +1,16 @@
 import InputRef from '../components/InputRef.vue'
 import ItemRef from '../components/ItemRef.vue'
+import ItemLookup from '../components/ItemLookup.vue'
 import TextareaGrowing from '../components/TextareaGrowing.vue'
 
 export default {
 	computed: {
 		prop () {
 			return 'blub'
-		}
+		},
+    float () {
+      return this.article.context !== 'lbld:legalBackground'
+    }
 	},
 	methods: {
     enter (evt) {
@@ -35,6 +39,7 @@ export default {
   components: {
     InputRef,
     ItemRef,
+    ItemLookup,
     TextareaGrowing
   }
 }

@@ -1,0 +1,20 @@
+.item-lookup {
+	max-width: 42rem;
+	input {
+		min-width: 15em;
+	}
+	a {
+		color: $focus;
+	}
+}
+.item-lookup-text {
+	max-width: 42rem;
+	padding: 1rem;
+	background-color: #eee;
+	white-space: pre-wrap;
+}
+.item-toggle {
+	cursor: pointer;
+	text-decoration: underline;
+	color: #666;
+}

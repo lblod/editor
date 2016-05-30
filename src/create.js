@@ -9,6 +9,11 @@ Vue.use(VueResource)
 
 new Vue({
   el: 'body',
+  data () {
+  	return {
+  		gemeentedecreet: null
+  	}
+  },
   mixins: [Fragments],
   components: { Create }
 })

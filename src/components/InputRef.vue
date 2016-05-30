@@ -198,6 +198,11 @@ export default {
         return console.log(match)
       }
 
+      match = /gemeentedecreet/i.exec(text)
+      if (match) {
+        console.log('mwut')
+      }
+
       // Just fill in value
       this.term = text
       this.propSearch = false
