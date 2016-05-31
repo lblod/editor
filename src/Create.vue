@@ -111,38 +111,13 @@
             </div>
             <br>
             <label class="inp">
-              <span class="inp-label">Kandidaat gemeenteraadslid</span>
+              <span class="inp-label">Opvolgend gemeenteraadslid</span>
               <input-person :model.sync="data.kperson" placeholder="Voornaam + familienaam"></input-person>
             </label>
             <label class="inp">
               <span class="inp-label">Einddatum van mandaat</span>
               <input class="inp-text inp-date" type="date" v-model="data.kdate">
             </label>
-            <br>
-            <div v-if="data.o1">
-              <label class="inp">
-                <span class="inp-label">Opvolger</span>
-                <input class="inp-text" type="text" v-model="data.o1name" placeholder="Voornaam + familienaam">
-              </label>
-              <label class="inp">
-                <span class="inp-label">Einddatum van mandaat</span>
-                <input class="inp-text inp-date" type="date" v-model="data.o1date">
-              </label>
-            </div>
-            <br>
-            <div v-if="data.o2">
-              <label class="inp">
-                <span class="inp-label">Tweede opvolger</span>
-                <input class="inp-text" type="text" v-model="data.o2name" placeholder="Voornaam + familienaam">
-              </label>
-              <label class="inp">
-                <span class="inp-label">Einddatum van mandaat</span>
-                <input class="inp-text inp-date" type="date" v-model="data.o2date">
-              </label>
-            </div>
-            <div v-if="data.o1&&!data.o2">
-              <a href="#" @click.prevent="data.o2=true">Tweede opvolger</a>
-            </div>
           </div>
           <div v-if="wizard==2">
             <label class="inp">
@@ -308,8 +283,9 @@ var templates = [
     if (data.pmandaat) {
       data.pname = data.pmandaat.name
     }
-    if (data.pmandaat) {
+    if (data.kperson) {
       data.kname = data.kperson.name
+      data.o1name = data.kperson.name
     }
     var p = [{
       title: 'Juridische gronden',
@@ -477,11 +453,10 @@ var data = [
   {},
   // Mandaat template
   {
-    title: 'Voordracht mandaat',
     p: false,
     pname: '',
     pdate: '',
-    preason: '',
+    preason: 'ontslag',
     kname: '',
     kdate: '',
     o1: false,
