@@ -82,13 +82,11 @@
         <div class="mode-create" v-if="mode==0">
           <div v-if="wizard==0">
             <p>
-              Kies een sjabloon om snel een besluit op te maken.
+              Welk besluit wenst u te nemen?
             </p>
-            <ul>
-              <li><a href="#" @click.prevent="start(1)">Wijziging mandaat gemeenteraadslid</a></li>
-            </ul>
+            <button type="button" @click="start(1)">Wijziging mandaat gemeenteraadslid</button>
             <p v-if="env.zitting">
-              <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
+              <a href="#" @click.prevent="compile(0)">Doorgaan zonder sjabloon</a>
             </p>
             <p v-else>
               Kies een orgaan & zitting
@@ -125,8 +123,8 @@
               <input class="inp-text" type="text" v-model="data.oname" placeholder="Voornaam + familienaam">
             </label>
           </div>
-          <br>
           <div v-if="wizard>0">
+            <br>
             <p v-if="env.zitting">
               <button v-if="data.pmandaat&&data.kperson" type="button" @click="compile()">Doorgaan</button>
               <span v-else>Kies een aftredend en opvolgend gemeenteraadslid</span>
@@ -581,9 +579,11 @@ export default {
       }
       decision['dcterms:title'] = this.opschrift
       decision['@context'] = {
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
         "schema": "http://schema.org/",
         "dcterms": "http://purl.org/dc/terms/",
-        lbld: 'http://decisions.data.vlaanderen.be/ns#'
+        "mandaat": 'http://mandates.data.vlaanderen.be/ns#',
+        "lbld": 'http://decisions.data.vlaanderen.be/ns#'
       }
       delete decision.subject
       if (decision.uri) {
