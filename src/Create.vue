@@ -434,7 +434,7 @@ var templates = [
       }, {
         prop: 'mandaat:init',
         value: {
-          'mandaat:position': 'gemeenteraadslid',
+          'mandaat:mandateType': 'gemeenteraadslid',
           'schema:person': null,
           'schema:startDate': null,
           'schema:endDate': null,
@@ -616,8 +616,8 @@ export default {
             decision['lbld:creates'] = []
           }
           decision['lbld:creates'].push({
-            '@type': 'mandaat:Mandaat',
-            'mandaat:position': 'gemeenteraadslid',
+            '@type': 'mandaat:Mandate',
+            'mandaat:mandateType': 'gemeenteraadslid',
             'mandaat:person': this.data.kperson,
             'schema:startDate': {
               '@type': 'xsd:date',

@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     index () {
-      var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandaat').map(this.lookup)
+      var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandate').map(this.lookup)
       return new Fuse(fragments, fuseOptions)
     }
   },

@@ -1821,56 +1821,56 @@ export default {
         id: '_:mathias',
         'schema:name': 'Mathias Van Compernolle'
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:peter'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:pieter'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:katie'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:raf'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:carolien'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:mathias'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:veronique'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:joep'
         }
       }, {
-        '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'gemeenteraadslid',
+        '@type': 'mandaat:Mandate',
+        'mandaat:mandateType': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:thomas'
         }
