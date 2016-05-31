@@ -1635,7 +1635,7 @@ export default {
         text: 'Districtsraad'
       }, {
         type: 'lbld:Orgaan',
-        id: '_:orgaan-gemeenteraad-vlavirgem',
+        'id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
         text: 'Gemeenteraad Vlavirgem',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
@@ -1696,7 +1696,7 @@ export default {
         'dcterms:title': 'Zitting op 25 mei',
         'schema:startDate': '2016-05-25',
         'lbld:organization': {
-          '@id': '_:orgaan-gemeenteraad-vlavirgem',
+          '@id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
           '@type': 'schema:Organization',
           'dcterms:title': 'Gemeenteraad Vlavirgem'
         }
@@ -1705,7 +1705,7 @@ export default {
         text: 'Zitting op 23 maart',
         date: '2016-03-23',
         'lbld:organization': {
-          '@id': '_:orgaan-gemeenteraad-vlavirgem'
+          '@id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
         }
       }, {
         type: 'schema:Event',
