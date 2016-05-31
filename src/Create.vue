@@ -663,13 +663,16 @@ export default {
         html += '<title>' + this.opschrift + ' - LBLOD</title>'
         html += '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">'
         html += '</head><body>'
+<<<<<<< 18195ad3ea7434c1cead7c6635aeee63fdf8711b
         html += '<div class="jumbotron"><div class="container"><h1>Lokaal besluit</h1><p>Deze webstek maakt deel uit van het project LBLOD.</p><p><a class="btn btn-primary btn-lg" href="http://lokaalbestuur.vlaanderen.be/lokale-besluiten-als-gelinkte-open-data" role="button">Meer info &raquo;</a></p></div></div>'
         html += '<div class="container"><div class="row"><div class="col-md-4">'
+=======
+        html += '<div class="jumbotron"><div class="container"><h1>Lokaal besluit</h1><p>Deze webstek maakt deel uit van het project LBLOD.</p><p><a class="btn btn-primary btn-lg" href="https://github.com/lblod" role="button">Meer info &raquo;</a></p></div></div>'
+        html += '<div class="container">'
+>>>>>>> More width on published pages
         html += this.$el.querySelector('#jsonld').innerHTML
-        html += '</div></div></div>'
-        html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
-        html += '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"><\/script>'
-        html += '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"><\/script></body></html>'
+        html += '</div>'
+        html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script></body></html>'
         console.log(html)
         this.$http.post(BACKEND_URL + 'admin/index.php', {
           uri: this.decision.uri,
