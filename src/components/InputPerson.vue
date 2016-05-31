@@ -38,16 +38,15 @@ export default {
   },
   computed: {
     index () {
-      var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandaat').map(this.lookup)
+      var fragments = this.$root.fragments.filter(x => x['@type'] === 'schema:Person').map(this.lookup)
       return new Fuse(fragments, fuseOptions)
     }
   },
   methods: {
-    lookup (m) {
-      let man = this.$root.map[m.item || m.id]
-      let person = this.$root.map[man['mandaat:person']['@id']]
+    lookup (p) {
+      let person = this.$root.map[p.item || p.id]
       return {
-        id: man.id,
+        id: person.id,
         text: person['schema:name']
       }
     },
@@ -97,9 +96,8 @@ export default {
         console.log('confirming but dont know what', uri)
       }
       if (this.model) {
-        let person = this.$root.map[this.model['mandaat:person']['@id']]
-        this.model.name = person['schema:name']
-        this.term = person['schema:name']
+        this.model.name = this.model['schema:name']
+        this.term = this.model['schema:name']
       }
     }
   }

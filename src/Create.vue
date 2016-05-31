@@ -97,7 +97,7 @@
           <div v-if="wizard==1">
             <label class="inp">
               <span class="inp-label">Ontslagnemend gemeenteraadslid</span>
-              <input-mandaat :model.sync="data.pmandaat" :placeholder="data.pname||'Voornaam + familienaam'"></input-mandaat>
+              <input-mandaat :model.sync="data.pmandaat" placeholder="Voornaam + familienaam"></input-mandaat>
             </label>
             <div v-if="data.pmandaat">
               <label class="inp">
@@ -112,7 +112,7 @@
             <br>
             <label class="inp">
               <span class="inp-label">Kandidaat gemeenteraadslid</span>
-              <input class="inp-text" type="text" v-model="data.kname" @input="subj(data.kname)" placeholder="Voornaam + familienaam">
+              <input-person :model.sync="data.kperson" placeholder="Voornaam + familienaam"></input-person>
             </label>
             <label class="inp">
               <span class="inp-label">Einddatum van mandaat</span>
@@ -187,6 +187,7 @@
 // notule > besluiten > artikels
 import '../assets/scss/main.scss'
 import InputMandaat from './components/InputMandaat.vue'
+import InputPerson from './components/InputPerson.vue'
 import InputSpatial from './components/InputSpatial.vue'
 import LbArticle from './components/LbArticle.vue'
 import LbLegal from './components/LbLegal.vue'
@@ -304,6 +305,12 @@ var templates = [
     }]
   },
   function (data) {
+    if (data.pmandaat) {
+      data.pname = data.pmandaat.name
+    }
+    if (data.pmandaat) {
+      data.kname = data.kperson.name
+    }
     var p = [{
       title: 'Juridische gronden',
       context: 'lbld:legalBackground'
@@ -497,11 +504,11 @@ var opschrift = [
   function (data) {
     if (!data) return;
     var subj = []
-    if (data.pname) {
-      subj.push('de kennisname van het ontslag van raadslid ' + data.pname)
+    if (data.pmandaat) {
+      subj.push('de kennisname van het ontslag van raadslid ' + data.pmandaat.name)
     }
-    if (data.kname) {
-      subj.push('de installatie van opvolger ' + data.kname)
+    if (data.kperson) {
+      subj.push('de installatie van opvolger ' + data.kperson.name)
     }
     return subj ? 'betreffende ' + subj.join(' en ') : ''
   }
@@ -739,6 +746,7 @@ export default {
   },
   components: {
     InputMandaat,
+    InputPerson,
     InputSpatial,
     LbArticle,
     LbLegal,

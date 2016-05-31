@@ -1770,8 +1770,40 @@ export default {
         'schema:name': 'Ingrid Willems'
       }, {
         '@type': 'schema:Person',
+        id: '_:pieter',
+        'schema:name': 'Pieter Colpaert'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:katrien',
+        'schema:name': 'Katrien De Smet'
+      }, {
+        '@type': 'schema:Person',
         id: '_:peter',
-        'schema:name': 'peterpeter'
+        'schema:name': 'Peter Mechant'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:heidi',
+        'schema:name': 'Heidi Godderis'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:raf',
+        'schema:name': 'Raf Buyle'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:liesbeth',
+        'schema:name': 'Liesbeth De Clercq'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:geert',
+        'schema:name': 'Geert Van Campenhout'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:carolien',
+        'schema:name': 'Carolien Willen'
+      }, {
+        '@type': 'schema:Person',
+        id: '_:katie',
+        'schema:name': 'Katie Heyse'
       }, {
         '@type': 'schema:Person',
         id: '_:thomas',
@@ -1779,47 +1811,66 @@ export default {
       }, {
         '@type': 'schema:Person',
         id: '_:joep',
-        'schema:name': 'joepjoep'
+        'schema:name': 'Joep Luijten'
       }, {
         '@type': 'schema:Person',
         id: '_:veronique',
-        'schema:name': 'veroniqueveronique'
+        'schema:name': 'Veronique Volders'
       }, {
         '@type': 'schema:Person',
         id: '_:mathias',
-        'schema:name': 'mathiasmathias'
+        'schema:name': 'Mathias Van Compernolle'
       }, {
         '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'eerste schepen',
-        'schema:endDate': '2016-06-30',
+        'mandaat:position': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:peter'
         }
       }, {
         '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'tweede schepen',
-        'schema:endDate': '2016-06-30',
+        'mandaat:position': 'gemeenteraadslid',
+        'mandaat:person': {
+          '@id': '_:pieter'
+        }
+      }, {
+        '@type': 'mandaat:Mandaat',
+        'mandaat:position': 'gemeenteraadslid',
+        'mandaat:person': {
+          '@id': '_:katie'
+        }
+      }, {
+        '@type': 'mandaat:Mandaat',
+        'mandaat:position': 'gemeenteraadslid',
+        'mandaat:person': {
+          '@id': '_:raf'
+        }
+      }, {
+        '@type': 'mandaat:Mandaat',
+        'mandaat:position': 'gemeenteraadslid',
+        'mandaat:person': {
+          '@id': '_:carolien'
+        }
+      }, {
+        '@type': 'mandaat:Mandaat',
+        'mandaat:position': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:mathias'
         }
       }, {
         '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'derde schepen',
-        'schema:endDate': '2016-06-30',
+        'mandaat:position': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:veronique'
         }
       }, {
         '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'vierde schepen',
-        'schema:endDate': '2016-06-30',
+        'mandaat:position': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:joep'
         }
       }, {
         '@type': 'mandaat:Mandaat',
-        'mandaat:position': 'vijfde schepen',
-        'schema:endDate': '2016-06-30',
+        'mandaat:position': 'gemeenteraadslid',
         'mandaat:person': {
           '@id': '_:thomas'
         }
