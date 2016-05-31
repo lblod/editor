@@ -55,8 +55,12 @@
           <span v-if="zittingOptions&&!env.advanced && env.zitting" @click="env.advanced=1" style="margin-top: 10px; opacity:.5">Meer opties...</span>
           <div v-else style="width:45%;margin-top:20px;">
             <label class="inp" v-if="env.advanced">
-              <span class="inp-label">URI</span>
+              <span class="inp-label">uuid:</span>
               <input class="inp-text" type="text" v-model="decision.uri">
+            </label>
+            <label class="inp" v-if="env.advanced">
+              <span class="inp-label">URI:</span>
+              <span style="white-space: nowrap">http://lblod.pieter.pm/decisions/{{encodeURIComponent(decision.uri)}}.html#decision</span>
             </label>
             <label class="inp" v-if="env.advanced">
               <span class="inp-label">BBC</span>
@@ -673,7 +677,7 @@ export default {
       }
       decision['dcterms:title'] = this.data && this.data.title
       if (!decision.uri) {
-        decision.uri = Date.now() % 100
+        decision.uri = (new Date()).toISOString();
         this.url = null
       }
       this.decision = addRefs(decision)
@@ -738,6 +742,11 @@ export default {
           return
         }
       }
+     }
+    },
+  watch: {
+    'decision.uri' : function (uri) {
+      this.decision.uri = uri.replace(/[^a-zA-Z0-9\-_]+/, '')
     }
   },
   components: {
