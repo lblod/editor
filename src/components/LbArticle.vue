@@ -1,8 +1,8 @@
 <template>
-  <article class="article article-numbered" :class="{'article-float':float}">
+  <article class="article article-numbered" :class="{'article-float':float, 'article-empty':!article.text}">
     <div class="article-text">
       <span class="article-number">Artikel {{ number }}.</span>
-      <textarea-growing :model.sync="article.text" :placeholder="article['@id']?'Referentie naar '+article['@id']:'Schrijf hier de inhoud van het artikel'" @keydown.enter="enter" @select="select"></textarea-growing>
+      <textarea-growing :model.sync="article.text" placeholder="Schrijf hier de inhoud van het artikel" @keydown.enter="enter" @select="select"></textarea-growing>
     </div>
     <div class="article-tools">
       <span class="ref-icon icon-times" @click="rm">&times;</span>

@@ -32,12 +32,7 @@
             <span class="inp-label">Sjabloon</span>
             <select class="inp-text inp-select" v-model="env.template" @change="start(env.template)">
               <option value="0">Standaard besluit</option>
-              <option disabled>Voordracht kandidaat-burgemeester</option>
-              <option disabled>Voordracht kandidaat-voorzitter gemeenteraad</option>
-              <option value="1">Voordracht kandidaat-schepenen</option>
-              <option disabled>Voordracht OCMW-raadsleden</option>
-              <option disabled>Voordracht politieraadsleden</option>
-              <option value="2">Ontslag gemeenteraadslid - Aktename</option>
+              <option value="1">Wijziging mandaat gemeenteraadslid</option>
             </select>
           </label>
           <label class="inp" v-if="zittingOptions.length&&env.zitting">
@@ -90,8 +85,7 @@
               Kies een sjabloon om snel een besluit op te maken.
             </p>
             <ul>
-              <li><a href="#" @click.prevent="start(1)">Voordracht kandidaat schepen</a></li>
-              <li><a href="#" @click.prevent="start(2)">Aktename ontslag</a></li>
+              <li><a href="#" @click.prevent="start(1)">Wijziging mandaat gemeenteraadslid</a></li>
             </ul>
             <p v-if="env.zitting">
               <button type="button" @click="compile(0)">Doorgaan zonder sjabloon</button>
@@ -102,31 +96,28 @@
           </div>
           <div v-if="wizard==1">
             <label class="inp">
-              <span class="inp-label">Kandidaat-schepen</span>
-              <input class="inp-text" type="text" v-model="data.kname" @input="subj(data.kname)" placeholder="Voornaam + familienaam">
+              <span class="inp-label">Ontslagnemend gemeenteraadslid</span>
+              <input-mandaat :model.sync="data.pmandaat" :placeholder="data.pname||'Voornaam + familienaam'"></input-mandaat>
             </label>
-            <label class="inp">
-              <span class="inp-label">Einddatum van mandaat</span>
-              <input class="inp-text inp-date" type="date" v-model="data.kdate">
-            </label>
-            <br>
-            <div v-if="data.p">
-              <label class="inp">
-                <span class="inp-label">Ontslagnemend schepen</span>
-                <input class="inp-text" type="text" v-model="data.pname" placeholder="Voornaam + familienaam">
-              </label>
+            <div v-if="data.pmandaat">
               <label class="inp">
                 <span class="inp-label">Einddatum van mandaat</span>
-                <input class="inp-text inp-date" type="date" v-model="data.pdate">
+                <input class="inp-text inp-date" type="date" v-model="data.pmandaat['schema:endDate']">
               </label>
               <label class="inp">
                 <span class="inp-label">Reden van vervanging</span>
                 <input class="inp-text" type="text" v-model="data.preason">
               </label>
             </div>
-            <div v-else>
-              <a href="#" @click.prevent="data.p=true">Ontslagnemend schepen</a>
-            </div>
+            <br>
+            <label class="inp">
+              <span class="inp-label">Kandidaat gemeenteraadslid</span>
+              <input class="inp-text" type="text" v-model="data.kname" @input="subj(data.kname)" placeholder="Voornaam + familienaam">
+            </label>
+            <label class="inp">
+              <span class="inp-label">Einddatum van mandaat</span>
+              <input class="inp-text inp-date" type="date" v-model="data.kdate">
+            </label>
             <br>
             <div v-if="data.o1">
               <label class="inp">
@@ -137,9 +128,6 @@
                 <span class="inp-label">Einddatum van mandaat</span>
                 <input class="inp-text inp-date" type="date" v-model="data.o1date">
               </label>
-            </div>
-            <div v-else>
-              <a href="#" @click.prevent="data.o1=true">Opvolger</a>
             </div>
             <br>
             <div v-if="data.o2">
@@ -186,8 +174,9 @@
     <div id="jsonld" style="display:none" v-if="render">
       <h1 v-text="jsonld['dcterms:title']"></h1>
       <section class="section" v-for="p in decision.p" track-by="$index">
-        <h2 v-if="p.title" class="section-title">{{p.title}}</h2>
-        <div v-else v-text="p.text"></div>
+        <h2 v-if="p.title&&!p.subtitle" class="section-title">{{p.title}}</h2>
+        <h3 v-if="p.title&&p.subtitle" class="section-title">{{p.title}}</h3>
+        <div v-if="!p.title" v-text="p.text"></div>
       </section>
       <script type="application/json" v-html="decision|json"></script>
     </div>
@@ -197,6 +186,7 @@
 <script>
 // notule > besluiten > artikels
 import '../assets/scss/main.scss'
+import InputMandaat from './components/InputMandaat.vue'
 import InputSpatial from './components/InputSpatial.vue'
 import LbArticle from './components/LbArticle.vue'
 import LbLegal from './components/LbLegal.vue'
@@ -279,7 +269,7 @@ var emptyDecision = {
   'lbld:zitting': null,
   'schema:author': {
     '@type': 'schema:Person',
-    'schema:name': ''
+    'schema:name': 'Bob'
   },
   'dcterms:description': null,
   uri: null,
@@ -290,14 +280,15 @@ var emptyDecision = {
 var templates = [
   function () {
     return [{
+      title: 'Juridische gronden',
+      context: 'lbld:legalBackground'
+    }, {
+      text: ''
+    }, {
       title: 'Motivering, feiten en context',
       context: 'lbld:motivation'
     }, {
       '@id': '',
-      text: ''
-    }, {
-      title: 'Juridische gronden'
-    }, {
       text: ''
     }, {
       title: 'Besluit',
@@ -344,39 +335,36 @@ var templates = [
     }, {
       title: 'Motivering, feiten en context'
     }, {
-      '@id': '',
       text: '',
       placeholder: 'Geef aan wanneer de relevante gemeenteraadsverkiezingen werden goedgekeurd'
     }, {
-      '@id': '',
       text: '',
       placeholder: 'Geef aan wanneer de betrokkene de eedaflegging heeft afgelegd'
     }, {
-      '@id': '',
       text: '',
       placeholder: 'Geef aan hoe en wanneer de betrokkene schriftelijk ontslag heeft meegedeeld aan de voorzitter'
     }, {
-      '@id': '',
       text: 'De voorzitter nam kennis van het ontslag van gemeenteraadslid {{pname}} op {{pdate}}. Door deze kennisname is het ontslag definitief. De raad kan hier enkel akte van nemen.'
     }, {
-      '@id': '',
       text: 'Uit het proces-verbaal van het gemeentelijk hoofdbureau blijkt dat {{o1name}} eerste opvolger voor de lijst "{{o1lijst}}" is.'
     }, {
-      '@id': '',
       text: 'De geloofsbrieven van {{o1name}} werden behoorlijk en tijdig ingediend en werden ter inzage gelegd met respect voor de decretale bepalingen.'
     }, {
-      '@id': '',
       text: 'Uit het onderzoek van de geloofsbrieven van de verkozen gemeenteraadsleden door de gemeenteraad, zoals voorgeschreven in artikel 7, §2 en artikel 10 van het Gemeentedecreet, blijkt dat {{o1name}} voldoet aan de verkiesbaarheidsvoorwaarden.'
     }, {
-      '@id': '',
       text: 'Mathias Van Compernolle heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
     }, {
       title: 'Besluit',
       context: 'lbld:decision'
     }, {
-      '@id': '',
       'type': 'lbld:Article',
-      text: ''
+      text: 'De raad neemt kennis van het ontslag van raadslid {{pname}}.'
+    }, {
+      'type': 'lbld:Article',
+      text: 'De raad keurt de geloofsbrieven van {{o1name}} goed.'
+    }, {
+      'type': 'lbld:Article',
+      text: 'De raad neemt kennis van de eedaflegging van {{o1name}} in handen van de voorzitter van de gemeenteraad.'
     }, {
       title: 'Bijlagen'
     }, {
@@ -450,11 +438,11 @@ var templates = [
     }, {
       'type': 'lbld:Article',
       '@id': '',
-      text: 'Artikel 2:  De raad keurt de geloofsbrieven van {{oname}} goed.'
+      text: 'De raad keurt de geloofsbrieven van {{oname}} goed.'
     }, {
       'type': 'lbld:Article',
       '@id': '',
-      text: 'Artikel 3: De raad neemt kennis van de eedaflegging van {{oname}} in handen van de voorzitter van de gemeenteraad.'
+      text: 'De raad neemt kennis van de eedaflegging van {{oname}} in handen van de voorzitter van de gemeenteraad.'
     }, {
       title: 'Bijlagen'
     }, {
@@ -467,7 +455,7 @@ var templates = [
       }, {
         prop: 'mandaat:init',
         value: {
-          'mandaat:position': 'eerste schepen',
+          'mandaat:position': 'gemeenteraadslid',
           'schema:person': null,
           'schema:startDate': null,
           'schema:endDate': null,
@@ -492,7 +480,7 @@ var data = [
     o1: false,
     o1name: '',
     o1date: '',
-    o1lijst: 'VlaVirGem feest',
+    o1lijst: 'Vlavirgem feest',
     o2: false,
     o2name: '',
     o2date: '',
@@ -690,7 +678,7 @@ export default {
       this.render = true
       this.$nextTick(function () {
         var html = '<!DOCTYPE html><html lang="nl"><head><meta charset="utf-8">'
-        html += '<title>' + opschrift + ' - LBLOD</title></head><body>'
+        html += '<title>' + this.opschrift + ' - LBLOD</title></head><body>'
         html += this.$el.querySelector('#jsonld').innerHTML
         html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
         console.log(html)
@@ -750,6 +738,7 @@ export default {
     }
   },
   components: {
+    InputMandaat,
     InputSpatial,
     LbArticle,
     LbLegal,

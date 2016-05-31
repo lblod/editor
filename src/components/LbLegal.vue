@@ -14,6 +14,13 @@
 <script>
 import Paragraph from '../mixins/Paragraph.js'
 
+function clean(a) {
+  a = a.slice(a.indexOf('rtikel ') + 7)
+  if (a.indexOf(' v') > 0) a = a.slice(0, a.indexOf(' '))
+  if (a.indexOf(',') > 0) a = a.slice(0, a.indexOf(','))
+  return a
+}
+
 export default {
   props: ['article'],
   data () {
@@ -28,17 +35,22 @@ export default {
         return '?'
       }
       if (v.indexOf('emeentedecreet') !== -1 && v.indexOf('rtikel') !== -1) {
-        var a = v.slice(v.indexOf('rtikel ') + 7)
-        if (a.indexOf(' v') > 0) a = a.slice(0, a.indexOf(' '))
-        if (a.indexOf(',') > 0) a = a.slice(0, a.indexOf(','))
-        return '_:gemeentedecreet-' + a
+        return '_:gemeentedecreet-' + clean(v)
+      }
+      if (v.indexOf('iesdecreet') !== -1 && v.indexOf('rtikel') !== -1) {
+        return '_:kiesdecreet-' + clean(v)
       }
     },
     art () {
       var v = this.id
       var art = this.$root.gemeentedecreet && this.$root.gemeentedecreet[v]
       if (art) {
-        art.title = 'Gemeentedecreet Art. ' + v.slice(18)
+        this.article['@id'] = 'http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=' + art.ref.slice(1)
+        return art
+      }
+      art = this.$root.kiesdecreet && this.$root.kiesdecreet[v]
+      if (art) {
+        this.article['@id'] = 'http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1020561&param=inhoud&AID=' + art.ref.slice(1)
         return art
       }
     }
