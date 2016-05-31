@@ -288,6 +288,7 @@ var templates = [
       context: 'lbld:legalBackground'
     }, {
       title: 'Bevoegdheid',
+      context: 'lbld:legalBackground',
       subtitle: true
     }, {
       text: 'Gelet op Artikel 7, §3 van het Gemeentedecreet van 15 juli 2005'
@@ -350,97 +351,6 @@ var templates = [
       text: ''
     }]
     return p
-  },
-  function () {
-    return [{
-      title: 'Aanleiding'
-    }, {
-      text: '{{pname}} liet weten dat hij ontslag neemt als gemeenteraadslid.'
-    }, {
-      title: 'Motivatie',
-      context: 'lbld:Motivation'
-    }, {
-      '@id': '',
-      text: 'Volgens het proces-verbaal van het hoofdstembureau van Kortrijk houdende vaststelling van de zetelverdeling tussen de lijsten en van de rangorde van de raadsleden en hun opvolgers, d.d. 14 oktober 2012, zoals geldig verklaard bij besluit van de Raad voor Verkiezingsbetwistingen van 21 december 2012, is {{oname}} de eerste opvolger.'
-    }, {
-      '@id': '',
-      text: '',
-    }, {
-      '@id': '',
-      context: 'lbld:legalBackground',
-      text: '{{oname}} gaat over tot de eedaflegging in handen van de voorzitter, waarvan de tekst conform artikel 7 §3 van het gemeentedecreet luidt als volgt: "Ik zweer de verplichtingen van mijn mandaat trouw na te komen". Van deze eedaflegging wordt een proces-verbaal opgemaakt.',
-      refs: [{
-        prop: 'lbld:legalBackground',
-        value: {
-          '@id': '_:gemeentedecreet-7',
-        }
-      }]
-    }, {
-      title: 'Juridische grond'
-    }, {
-      text: 'We verwijzen hierbij naar de bepalingen van het gemeentedecreet en het kiesdecreet.',
-      context: 'lbld:legalBackground',
-      refs: [{
-        prop: 'lbld:legalBackground',
-        value: {
-          '@id': '_:kiesdecreet',
-        }
-      }, {
-        prop: 'lbld:legalBackground',
-        value: {
-          '@id': '_:gemeentedecreet'
-        }
-      }]
-    }, {
-      title: 'Bevoegdheid'
-    }, {
-      text: 'De GR is bevoegd op basis van artikel 42-43 van het gemeentedecreet.',
-      context: 'lbld:legalBackground',
-      refs: [{
-        prop: 'lbld:legalBackground',
-        value: {
-          '@id': '_:gemeentedecreet-42'
-        }
-      }, {
-        prop: 'lbld:legalBackground',
-        value: {
-          '@id': '_:gemeentedecreet-43'
-        }
-      }]
-    }, {
-      title: 'Besluit',
-      context: 'lbld:article'
-    }, {
-      'type': 'lbld:Article',
-      '@id': '',
-      text: 'De raad neemt kennis van het ontslag van raadslid {{pname}}.'
-    }, {
-      'type': 'lbld:Article',
-      '@id': '',
-      text: 'De raad keurt de geloofsbrieven van {{oname}} goed.'
-    }, {
-      'type': 'lbld:Article',
-      '@id': '',
-      text: 'De raad neemt kennis van de eedaflegging van {{oname}} in handen van de voorzitter van de gemeenteraad.'
-    }, {
-      title: 'Bijlagen'
-    }, {
-      text: 'Mandaatvoordracht',
-      refs: [{
-        prop: 'mandaat:exit',
-        value: {
-          '@id': 'nope'
-        }
-      }, {
-        prop: 'mandaat:init',
-        value: {
-          'mandaat:mandateType': 'gemeenteraadslid',
-          'schema:person': null,
-          'schema:startDate': null,
-          'schema:endDate': null,
-        }
-      }]
-    }]
   }
 ]
 
@@ -558,10 +468,16 @@ export default {
             }
             p[p.refs[j].prop].push(p.refs[j].value)
           }
-          if (p['type'] === 'lbld:Article') {
+          if (context === 'lbld:article') {
             p['@type'] = 'lbld:Article'
             p['dcterms:title'] = 'Artikel ' + p.counter + ' van het Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum')
             p['dcterms:description'] = p.text
+          } else if (context === 'lbld:legalBackground' && p['@id'].startsWith('current')) {
+            p['@type'] = 'lbld:Article'
+            p['dcterms:title'] = p.text.slice(0, p.text.indexOf('\n'))
+            if (p.text.indexOf('\n') !== -1) {
+              p['dcterms:description'] = p.text.slice(p.text.indexOf('\n') + 1)
+            }
           }
           delete p.type
           delete p.counter
