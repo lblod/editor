@@ -246,7 +246,7 @@ function addRefs (obj) {
   return obj
 }
 
-var sampleDecision 
+var sampleDecision
 try {
   sampleDecision = JSON.parse(window.localStorage.getItem('decision'))
 } catch (e) {}
@@ -685,9 +685,16 @@ export default {
       this.render = true
       this.$nextTick(function () {
         var html = '<!DOCTYPE html><html lang="nl"><head><meta charset="utf-8">'
-        html += '<title>' + this.opschrift + ' - LBLOD</title></head><body>'
+        html += '<title>' + this.opschrift + ' - LBLOD</title>'
+        html += '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">'
+        html += '</head><body>'
+        html += '<div class="jumbotron"><div class="container"><h1>Lokaal besluit</h1><p>Deze webstek maakt deel uit van het project LBLOD.</p><p><a class="btn btn-primary btn-lg" href="https://github.com/lblod" role="button">Meer info &raquo;</a></p></div></div>'
+        html += '<div class="container"><div class="row"><div class="col-md-4">'
         html += this.$el.querySelector('#jsonld').innerHTML
+        html += '</div></div></div>'
         html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script>'
+        html += '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"><\/script>'
+        html += '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"><\/script></body></html>'
         console.log(html)
         this.$http.post(BACKEND_URL + 'admin/index.php', {
           uri: this.decision.uri,
