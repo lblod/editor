@@ -558,6 +558,13 @@ export default {
             }
             p[p.refs[j].prop].push(p.refs[j].value)
           }
+          if (p['type'] === 'lbld:Article') {
+            p['@type'] = 'lbld:Article'
+            p['dcterms:title'] = 'Artikel ' + p.counter + ' van het Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum')
+            p['dcterms:description'] = p.text
+          }
+          delete p.type
+          delete p.counter
           delete p.refs
           delete p.text
           decision[context].push(p)
@@ -731,6 +738,7 @@ export default {
         if (obj.p[i].title && obj.p[i].context === 'lbld:article') {
           counter = 1
         } else if (counter) {
+          obj.p[i].counter = counter
           obj.p[i]['@id'] = 'current:article-' + counter
           counter++
         }
