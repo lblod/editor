@@ -1938,7 +1938,7 @@ export default {
           }]
         }, {
           title: 'Besluit',
-          context: 'lbld:decision'
+          context: 'lbld:article'
         }, {
           'type': 'lbld:Article',
           '@id': '_:decision-163#1',

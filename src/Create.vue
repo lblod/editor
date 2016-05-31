@@ -268,7 +268,7 @@ var templates = [
       text: ''
     }, {
       title: 'Besluit',
-      context: 'lbld:decision'
+      context: 'lbld:article'
     }, {
       '@id': '',
       'type': 'lbld:Article',
@@ -338,7 +338,7 @@ var templates = [
       text: 'Mathias Van Compernolle heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
     }, {
       title: 'Besluit',
-      context: 'lbld:decision'
+      context: 'lbld:article'
     }, {
       'type': 'lbld:Article',
       text: 'De raad neemt kennis van het ontslag van raadslid {{pname}}.'
@@ -413,7 +413,7 @@ var templates = [
       }]
     }, {
       title: 'Besluit',
-      context: 'lbld:decision'
+      context: 'lbld:article'
     }, {
       'type': 'lbld:Article',
       '@id': '',
@@ -698,7 +698,7 @@ export default {
       // Article numbering
       var counter = 0
       for (var i = 0; i < obj.p.length; i++) {
-        if (obj.p[i].title && obj.p[i].context === 'lbld:decision') {
+        if (obj.p[i].title && obj.p[i].context === 'lbld:article') {
           counter = 1
         } else if (counter) {
           obj.p[i]['@id'] = 'current:article-' + counter
