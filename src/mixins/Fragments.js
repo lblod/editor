@@ -1674,46 +1674,51 @@ export default {
           '@id': '_:orgaan-districtsraad'
         }
       }, {
-        type: 'lbld:Zitting',
+        type: 'schema:Event',
         text: 'Zitting op 25 mei',
         date: '2016-05-25',
-        'lbld:orgaan': {
+        'lbld:organization': {
           '@id': '_:orgaan-gemeenteraad-kortrijk'
         }
       }, {
-        type: 'lbld:Zitting',
+        type: 'schema:Event',
         text: 'Zitting op 23 maart',
         date: '2016-03-23',
-        'lbld:orgaan': {
+        'lbld:organization': {
           '@id': '_:orgaan-gemeenteraad-kortrijk'
         }
       }, {
-        id: '_:zitting-1',
-        type: 'lbld:Zitting',
-        text: 'Zitting op 25 mei',
-        date: '2016-05-25',
-        'lbld:orgaan': {
-          '@id': '_:orgaan-gemeenteraad-vlavirgem'
+        'id': '_:zitting-1',
+        '@id': '_:zitting-1',
+        'type': 'schema:Event',
+        '@type': 'schema:Event',
+        'text': 'Zitting op 25 mei',
+        'dcterms:title': 'Zitting op 25 mei',
+        'schema:startDate': '2016-05-25',
+        'lbld:organization': {
+          '@id': '_:orgaan-gemeenteraad-vlavirgem',
+          '@type': 'schema:Organization',
+          'dcterms:title': 'Gemeenteraad Vlavirgem'
         }
       }, {
-        type: 'lbld:Zitting',
+        type: 'schema:Event',
         text: 'Zitting op 23 maart',
         date: '2016-03-23',
-        'lbld:orgaan': {
+        'lbld:organization': {
           '@id': '_:orgaan-gemeenteraad-vlavirgem'
         }
       }, {
-        type: 'lbld:Zitting',
+        type: 'schema:Event',
         text: 'Zitting op 25 mei',
         date: '2016-05-25',
-        'lbld:orgaan': {
+        'lbld:organization': {
           '@id': '_:orgaan-gemeenteraad-niel'
         }
       }, {
-        type: 'lbld:Zitting',
+        type: 'schema:Event',
         text: 'Zitting op 23 maart',
         date: '2016-03-23',
-        'lbld:orgaan': {
+        'lbld:organization': {
           '@id': '_:orgaan-gemeenteraad-niel'
         }
       }, {

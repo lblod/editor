@@ -210,6 +210,7 @@ function addRefs (obj) {
       context = obj.p[i].context
       counter = 1
     } else if (context) {
+      obj.p[i].counter = counter
       obj.p[i]['@id'] = 'current:' + context.slice(5) + '-' + counter
       counter++
     }
@@ -425,7 +426,7 @@ export default {
       if (!this.$root.fragments || !this.env.orgaan) {
         return []
       }
-      return this.$root.fragments.filter(t => t['lbld:orgaan'] && t['lbld:orgaan']['@id'] === this.env.orgaan)
+      return this.$root.fragments.filter(t => t['lbld:organization'] && t['lbld:organization']['@id'] === this.env.orgaan)
     },
     zittingDate () {
       var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
@@ -516,6 +517,7 @@ export default {
       }
       // TODO: split off to seperate function
       if (this.env.template === 1) {
+        decision['lbld:bbcCode'] = 'BV01'
         if (this.data.pmandaat) {
           if (!decision['lbld:changes']) {
             decision['lbld:changes'] = []
@@ -542,6 +544,7 @@ export default {
           })
         }
       }
+      decision['schema:event'] = this.zittingOptions.find(z => z.id === this.env.zitting)
       return decision
     }
   },
