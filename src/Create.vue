@@ -144,7 +144,7 @@
     </div>
     <div id="jsonld" style="display:none" v-if="render">
       <h1 v-text="jsonld['dcterms:title']"></h1>
-      <section class="section" v-for="p in decision.p" track-by="$index">
+      <section v-for="p in decision.p" track-by="$index">
         <h2 v-if="p.title&&!p.subtitle" class="section-title">{{p.title}}</h2>
         <h3 v-if="p.title&&p.subtitle" class="section-title">{{p.title}}</h3>
         <div v-if="!p.title" v-text="p.text"></div>
@@ -618,6 +618,7 @@ export default {
         var html = '<!DOCTYPE html><html lang="nl"><head><meta charset="utf-8">'
         html += '<title>' + this.opschrift + ' - LBLOD</title>'
         html += '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">'
+        html += '<style type="text/css">section>div{white-space:pre-wrap;margin-bottom:.5rem}</style>'
         html += '</head><body>'
         html += '<div class="jumbotron"><div class="container"><h1>Lokaal besluit</h1><p>Deze webstek maakt deel uit van het project LBLOD.</p><p><a class="btn btn-primary btn-lg" href="http://lokaalbestuur.vlaanderen.be/lokale-besluiten-als-gelinkte-open-data" role="button">Meer info &raquo;</a></p></div></div>'
         html += '<div class="container">'
