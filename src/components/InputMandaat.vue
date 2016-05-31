@@ -54,9 +54,7 @@ export default {
     blur () {
       var self = this
       setTimeout(function () {
-        if (!self.model) {
-          self.term = null
-        }
+        self.term = null
         self.options = null
         self.ghost = 0
       }, 100)
@@ -99,7 +97,6 @@ export default {
       if (this.model) {
         let person = this.$root.map[this.model['mandaat:person']['@id']]
         this.model.name = person['schema:name']
-        this.term = person['schema:name']
       }
     }
   }

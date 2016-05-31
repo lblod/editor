@@ -35,10 +35,10 @@
               <option value="1">Wijziging mandaat gemeenteraadslid</option>
             </select>
           </label>
-          <label class="inp" v-if="zittingOptions.length&&env.zitting">
+<!--           <label class="inp" v-if="zittingOptions.length&&env.zitting">
             <span class="inp-label">Onderwerp</span>
             <input class="inp-text" type="text" v-model="decision.subject">
-          </label>
+          </label> -->
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
         <div class="mode-editor" v-if="mode==1">
@@ -97,12 +97,12 @@
           <div v-if="wizard==1">
             <label class="inp">
               <span class="inp-label">Ontslagnemend gemeenteraadslid</span>
-              <input-mandaat :model.sync="data.pmandaat" placeholder="Voornaam + familienaam"></input-mandaat>
+              <input-mandaat :model.sync="data.pmandaat" :placeholder="data.pmandaat&&data.pmandaat.name||'Voornaam + familienaam'"></input-mandaat>
             </label>
             <div v-if="data.pmandaat">
               <label class="inp">
                 <span class="inp-label">Einddatum van mandaat</span>
-                <input class="inp-text inp-date" type="date" v-model="data.pmandaat['schema:endDate']">
+                <input class="inp-text inp-date" type="date" v-model="data.pdate">
               </label>
               <label class="inp">
                 <span class="inp-label">Reden van vervanging</span>
@@ -112,11 +112,7 @@
             <br>
             <label class="inp">
               <span class="inp-label">Opvolgend gemeenteraadslid</span>
-              <input-person :model.sync="data.kperson" placeholder="Voornaam + familienaam"></input-person>
-            </label>
-            <label class="inp">
-              <span class="inp-label">Einddatum van mandaat</span>
-              <input class="inp-text inp-date" type="date" v-model="data.kdate">
+              <input-person :model.sync="data.kperson" :placeholder="data.kperson&&data.kperson.name||'Voornaam + familienaam'"></input-person>
             </label>
           </div>
           <div v-if="wizard==2">
@@ -129,9 +125,11 @@
               <input class="inp-text" type="text" v-model="data.oname" placeholder="Voornaam + familienaam">
             </label>
           </div>
+          <br>
           <div v-if="wizard>0">
             <p v-if="env.zitting">
-              <button type="button" @click="compile()">Doorgaan</button>
+              <button v-if="data.pmandaat&&data.kperson" type="button" @click="compile()">Doorgaan</button>
+              <span v-else>Kies een aftredend en opvolgend gemeenteraadslid</span>
             </p>
             <p v-else>
               Kies een orgaan & zitting
@@ -447,6 +445,7 @@ var templates = [
     }]
   }
 ]
+
 // Template data
 var data = [
   // Default template has no data
@@ -455,7 +454,7 @@ var data = [
   {
     p: false,
     pname: '',
-    pdate: '',
+    pdate: new Date().toJSON().slice(0, 10),
     preason: 'ontslag',
     kname: '',
     kdate: '',
@@ -520,6 +519,10 @@ export default {
       }
       return this.$root.fragments.filter(t => t['lbld:orgaan'] && t['lbld:orgaan']['@id'] === this.env.orgaan)
     },
+    zittingDate () {
+      var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
+      return zit && zit.date
+    },
     docs () {
       if (!this.$root.fragments) {
         return []
@@ -531,11 +534,10 @@ export default {
         return ''
       }
       var d = inert(data[this.env.template])
-      var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
       if (opschrift[this.env.template]) {
-        return 'Gemeenteraadsbesluit van ' + (zit && zit.date || 'datum') + ' ' + opschrift[this.env.template](this.data)
+        return 'Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum') + ' ' + opschrift[this.env.template](this.data)
       }
-      return ['Gemeenteraadsbesluit van ' + (zit && zit.date || 'datum'), d && d.title, this.decision.subject].filter(Boolean).join(' - ')
+      return ['Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum'), d && d.title, this.decision.subject].filter(Boolean).join(' - ')
     },
     jsonld () {
       var decision = inert(this.decision);
@@ -588,6 +590,34 @@ export default {
         decision['@id'] = BACKEND_URL + 'decisions/' + decision.uri + '.html#decision'
         decision['@context'].current = BACKEND_URL + 'decisions/' + decision.uri + '.html#'
         delete decision.uri
+      }
+      // TODO: split off to seperate function
+      if (this.env.template === 1) {
+        if (this.data.pmandaat) {
+          if (!decision['lbld:changes']) {
+            decision['lbld:changes'] = []
+          }
+          let man = inert(this.data.pmandaat)
+          man['schema:endDate'] =  {
+            '@type': 'xsd:date',
+            '@value': this.data.pdate
+          }
+          decision['lbld:changes'].push(man)
+        }
+        if (this.data.kperson) {
+          if (!decision['lbld:creates']) {
+            decision['lbld:creates'] = []
+          }
+          decision['lbld:creates'].push({
+            '@type': 'mandaat:Mandaat',
+            'mandaat:position': 'gemeenteraadslid',
+            'mandaat:person': this.data.kperson,
+            'schema:startDate': {
+              '@type': 'xsd:date',
+              '@value': this.zittingDate
+            }
+          })
+        }
       }
       return decision
     }

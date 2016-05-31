@@ -53,9 +53,7 @@ export default {
     blur () {
       var self = this
       setTimeout(function () {
-        if (!self.model) {
-          self.term = null
-        }
+        self.term = null
         self.options = null
         self.ghost = 0
       }, 100)
@@ -97,7 +95,6 @@ export default {
       }
       if (this.model) {
         this.model.name = this.model['schema:name']
-        this.term = this.model['schema:name']
       }
     }
   }
