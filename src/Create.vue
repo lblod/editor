@@ -607,7 +607,7 @@ export default {
       decision['@context'] = {
         "schema": "http://schema.org/",
         "dcterms": "http://purl.org/dc/terms/",
-        lbld: 'http://lbld.vlaanderen/'
+        lbld: 'http://decisions.data.vlaanderen.be/ns#'
       }
       delete decision.subject
       if (decision.uri) {
