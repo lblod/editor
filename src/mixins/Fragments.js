@@ -5,6 +5,7 @@ var idCounter = 0
 export const context = {
   "dcterms": "http://purl.org/dc/terms/",
   "editor": "http://lblod.github.io/editor/assets/editor.json#",
+  "people": "http://lblod.github.io/editor/assets/people.json#",
   "foaf": "http://xmlns.com/foaf/0.1/",
   "gemeente": "http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=",
   "hydra": "http://www.w3.org/ns/hydra/core#",
@@ -126,9 +127,8 @@ export default {
   ready () {
     this.load('./assets/editor.json')
     this.load('./assets/gemeentedecreet.json')
-    this.load('./assets/mandates.json')
     this.load('./assets/people.json')
-    this.load('http://linkeddatatestagiv.cloudapp.net/poc/decisions.jsonld').catch(function () {
+    this.load('http://linkeddatatestagiv.cloudapp.net/poc/decisions.jsonld?limit=100000').catch(function () {
       this.load('./assets/example.json')
     })
   }

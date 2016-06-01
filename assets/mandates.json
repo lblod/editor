@@ -1,6 +1,7 @@
 {
   "@context": {
     "dcterms": "http://purl.org/dc/terms/",
+    "people": "http://lblod.github.io/editor/assets/people.json#",
     "gemeente": "http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=",
     "lbld": "http://decisions.data.vlaanderen.be/ns#",
     "mandaat": "http://mandates.data.vlaanderen.be/ns#",
@@ -10,26 +11,26 @@
   "@graph": [{
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:peter" }
+    "mandaat:person": { "@id": "people:peter" }
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:katie" }
+    "mandaat:person": { "@id": "people:katie" }
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:carolien" }
+    "mandaat:person": { "@id": "people:carolien" }
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:mathias" }
+    "mandaat:person": { "@id": "people:mathias" }
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:veronique" }
+    "mandaat:person": { "@id": "people:veronique" }
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:joep" }
+    "mandaat:person": { "@id": "people:joep" }
   }]
 }
