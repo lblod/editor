@@ -17,7 +17,7 @@ export default {
     },
     orgaanOptions () {
       return this.fragments
-      .filter(t => t.type === 'lbld:OrgaanType')
+      .filter(t => t.type === 'schema:OrganizationType')
       .map(t => {
         return {
           type: t.text,
@@ -1551,7 +1551,7 @@ export default {
       }, {
         "@id": "lbld:responsibleFor",
         "@type": "rdf:Property",
-        range: ['lbld:Orgaan'],
+        range: ['schema:Organization'],
         "rdfs:comment": {
           "@language": "en",
           "@value": "A linked article to indicate the decision making organisation is responsible for this matter"
@@ -1622,53 +1622,53 @@ export default {
         id: '_:decision-79#1',
         text: 'Besluit 79 artikel 1'
       }, {
-        type: 'lbld:OrgaanType',
+        type: 'schema:OrganizationType',
         id: '_:orgaan-gemeenteraad',
         text: 'Gemeenteraad'
       }, {
-        type: 'lbld:OrgaanType',
+        type: 'schema:OrganizationType',
         id: '_:orgaan-schepencollege',
         text: 'Schepencollege'
       }, {
-        type: 'lbld:OrgaanType',
+        type: 'schema:OrganizationType',
         id: '_:orgaan-districtsraad',
         text: 'Districtsraad'
       }, {
-        type: 'lbld:Orgaan',
+        type: 'schema:Organization',
         'id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
         text: 'Gemeenteraad Vlavirgem',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
         }
       }, {
-        type: 'lbld:Orgaan',
+        type: 'schema:Organization',
         id: '_:orgaan-gemeenteraad-kortrijk',
         text: 'Gemeenteraad Kortrijk',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
         }
       }, {
-        type: 'lbld:Orgaan',
+        type: 'schema:Organization',
         id: '_:orgaan-gemeenteraad-niel',
         text: 'Gemeenteraad Niel',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
         }
       }, {
-        type: 'lbld:Orgaan',
+        type: 'schema:Organization',
         id: '_:orgaan-gemeenteraad-scheveninge',
         text: 'Gemeenteraad Scheveninge',
         'lbld:type': {
           '@id': '_:orgaan-gemeenteraad'
         }
       }, {
-        type: 'lbld:Orgaan',
+        type: 'schema:Organization',
         text: 'Voorbeeld Schepencollege',
         'lbld:type': {
           '@id': '_:orgaan-schepencollege'
         }
       }, {
-        type: 'lbld:Orgaan',
+        type: 'schema:Organization',
         text: 'Voorbeeld Districtsraad',
         'lbld:type': {
           '@id': '_:orgaan-districtsraad'
@@ -1694,6 +1694,7 @@ export default {
         '@type': 'schema:Event',
         'text': 'Zitting op 25 mei',
         'dcterms:title': 'Zitting op 25 mei',
+        'date': '2016-05-25',
         'schema:startDate': '2016-05-25',
         'lbld:organization': {
           '@id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
@@ -1701,11 +1702,32 @@ export default {
           'dcterms:title': 'Gemeenteraad Vlavirgem'
         }
       }, {
-        type: 'schema:Event',
+        'id': '_:zitting-2',
+        '@id': '_:zitting-2',
+        'type': 'schema:Event',
+        '@type': 'schema:Event',
         text: 'Zitting op 23 maart',
+        'dcterms:title': 'Zitting op 23 maart',
         date: '2016-03-23',
+        'schema:startDate': '2016-03-23',
         'lbld:organization': {
           '@id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
+          '@type': 'schema:Organization',
+          'dcterms:title': 'Gemeenteraad Vlavirgem'
+        }
+      }, {
+        'id': '_:zitting-3',
+        '@id': '_:zitting-3',
+        'type': 'schema:Event',
+        '@type': 'schema:Event',
+        text: 'Zitting op 5 februari',
+        'dcterms:title': 'Zitting op 5 februari',
+        date: '2016-02-05',
+        'schema:startDate': '2016-02-05',
+        'lbld:organization': {
+          '@id': 'http://vlavirgem.pieter.pm/#gemeenteraad',
+          '@type': 'schema:Organization',
+          'dcterms:title': 'Gemeenteraad Vlavirgem'
         }
       }, {
         type: 'schema:Event',

@@ -404,7 +404,7 @@ export default {
       env: {
         advanced: false,
         person: CURRENT_USER,
-        orgaan: '_:orgaan-gemeenteraad-vlavirgem',
+        orgaan: 'http://vlavirgem.pieter.pm/#gemeenteraad',
         zitting: '_:zitting-1',
         template: 0
       },
@@ -516,7 +516,7 @@ export default {
         delete decision.uri
       }
       // TODO: split off to seperate function
-      if (this.env.template === 1) {
+      if (this.env.template == 1) {
         decision['lbld:bbcCode'] = 'BV01'
         if (this.data.pmandaat) {
           if (!decision['lbld:changes']) {
