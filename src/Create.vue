@@ -431,7 +431,7 @@ export default {
     },
     zittingDate () {
       var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
-      return zit && zit.date
+      return zit && (zit.date || zit['schema:startDate'])
     },
     docs () {
       if (!this.$root.fragments) {

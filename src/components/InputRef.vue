@@ -17,7 +17,7 @@ var fuseOptions = {
   caseSensitive: false,
   shouldSort: true,
   tokenize: true,
-  threshold: 0.6,
+  threshold: 0.5,
   location: 0,
   distance: 100,
   id: 'id'
@@ -48,10 +48,13 @@ export default {
     },
     index () {
       var fragments = Object.values(this.$root.fragments)
-      if (this.term && this.prop) {
+      if (this.prop) {
         var prop = this.$root.map[this.prop]
-        console.log(fragments)
+        console.log('index', this.prop, fragments.length)
         fragments = fragments.filter(f => prop.range.includes(f.type))
+        if (this.prop === 'lbld:replaces') {
+          fragments = fragments.filter(f => f.id.indexOf('#article') !== -1)
+        }
       }
       fuseOptions.id = 'id'
       fuseOptions.keys = ['text']
@@ -97,11 +100,8 @@ export default {
       //   this.ghost = 0
       //   return console.warn('no needle')
       // }
-      if (needle) {
+      if (needle || this.prop) {
         this.options = (this.propSearch ? this.propIndex : this.index).search(needle || ' ').slice(0, 20)
-      } else if (this.prop) {
-        var prop = this.$root.map[this.prop]
-        this.options = this.$root.fragments.filter(f => prop.range.includes(f.type)).map(p => p['id'])
       } else {
         this.options = this.$root.props.map(p => p['@id']);
       }

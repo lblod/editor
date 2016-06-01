@@ -36,6 +36,14 @@ const vocabContext = [{
     "@value": "Temporal Coverage"
   },
   range: ['text', 'dcterms:PeriodOfTime']
+}, {
+  "@id": "lbld:replaces",
+  "@type": "rdf:Property",
+  range: ['lbld:Article'],
+  "rdfs:label": {
+    "@language": "en",
+    "@value": "Replaces"
+  }
 }]
 
 const fragments = []
