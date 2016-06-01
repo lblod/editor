@@ -166,6 +166,7 @@ import LbParagraph from './components/LbParagraph.vue'
 import LbSubtitle from './components/LbSubtitle.vue'
 import LbTitle from './components/LbTitle.vue'
 import TextareaGrowing from './components/TextareaGrowing.vue'
+import {context as exportContext} from './mixins/Fragments.js'
 
 const EMPTY_ARTICLE = {
   '@id': null,
@@ -502,13 +503,7 @@ export default {
         }
       }
       decision['dcterms:title'] = this.opschrift
-      decision['@context'] = {
-        "xsd": "http://www.w3.org/2001/XMLSchema#",
-        "schema": "http://schema.org/",
-        "dcterms": "http://purl.org/dc/terms/",
-        "mandaat": 'http://mandates.data.vlaanderen.be/ns#',
-        "lbld": 'http://decisions.data.vlaanderen.be/ns#'
-      }
+      decision['@context'] = exportContext
       delete decision.subject
       if (decision.uri) {
         decision['@id'] = BACKEND_URL + 'decisions/' + decision.uri + '.html#decision'

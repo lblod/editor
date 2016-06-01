@@ -1,0 +1,91 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "gemeente": "http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=",
+    "lbld": "http://decisions.data.vlaanderen.be/ns#",
+    "mandaat": "http://mandates.data.vlaanderen.be/ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [{
+    "@type": "schema:Person",
+    "@id": "_:bart",
+    "schema:name": "Bart Caron"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:mattias",
+    "schema:name": "Mattias Vandemaele"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:petra",
+    "schema:name": "Petra Verhenne"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:stijn",
+    "schema:name": "Stijn Vanneste"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:annelies",
+    "schema:name": "Annelies Vandendriesche"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:jan",
+    "schema:name": "Jan Vansteenlandt"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:ingrid",
+    "schema:name": "Ingrid Willems"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:pieter",
+    "schema:name": "Pieter Colpaert"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:katrien",
+    "schema:name": "Katrien De Smet"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:peter",
+    "schema:name": "Peter Mechant"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:heidi",
+    "schema:name": "Heidi Godderis"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:raf",
+    "schema:name": "Raf Buyle"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:liesbeth",
+    "schema:name": "Liesbeth De Clercq"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:geert",
+    "schema:name": "Geert Van Campenhout"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:carolien",
+    "schema:name": "Carolien Willen"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:katie",
+    "schema:name": "Katie Heyse"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:thomas",
+    "schema:name": "Thomas Ghysels"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:joep",
+    "schema:name": "Joep Luijten"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:veronique",
+    "schema:name": "Veronique Volders"
+  }, {
+    "@type": "schema:Person",
+    "@id": "_:mathias",
+    "schema:name": "Mathias Van Compernolle"
+  }]
+}

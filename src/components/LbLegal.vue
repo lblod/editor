@@ -35,22 +35,16 @@ export default {
         return '?'
       }
       if (v.indexOf('emeentedecreet') !== -1 && v.indexOf('rtikel') !== -1) {
-        return '_:gemeentedecreet-' + clean(v)
+        return 'gemeente:' + clean(v)
       }
       if (v.indexOf('iesdecreet') !== -1 && v.indexOf('rtikel') !== -1) {
-        return '_:kiesdecreet-' + clean(v)
+        return 'kies:' + clean(v)
       }
     },
     art () {
-      var v = this.id
-      var art = this.$root.gemeentedecreet && this.$root.gemeentedecreet[v]
+      var art = this.$root.map && this.$root.map[this.id]
       if (art) {
-        this.article['@id'] = 'http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=' + art.ref.slice(1)
-        return art
-      }
-      art = this.$root.kiesdecreet && this.$root.kiesdecreet[v]
-      if (art) {
-        this.article['@id'] = 'http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1020561&param=inhoud&AID=' + art.ref.slice(1)
+        this.article['@id'] = art['@id']
         return art
       }
     }

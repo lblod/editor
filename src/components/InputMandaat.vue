@@ -39,6 +39,7 @@ export default {
   computed: {
     index () {
       var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandate').map(this.lookup)
+      console.log('index', fragments)
       return new Fuse(fragments, fuseOptions)
     }
   },
@@ -48,7 +49,7 @@ export default {
       let person = this.$root.map[man['mandaat:person']['@id']]
       return {
         id: man.id,
-        text: person['schema:name']
+        text: person && person['schema:name'] || 'Oeps'
       }
     },
     blur () {

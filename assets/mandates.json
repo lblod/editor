@@ -1,0 +1,47 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "gemeente": "http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=",
+    "lbld": "http://decisions.data.vlaanderen.be/ns#",
+    "mandaat": "http://mandates.data.vlaanderen.be/ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [{
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:peter" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:pieter" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:katie" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:raf" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:carolien" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:mathias" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:veronique" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:joep" }
+  }, {
+    "@type": "mandaat:Mandate",
+    "mandaat:mandateType": "gemeenteraadslid",
+    "mandaat:person": { "@id": "_:thomas" }
+  }]
+}

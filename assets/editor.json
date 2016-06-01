@@ -1,0 +1,90 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "editor": "http://lblod.github.io/editor/assets/editor.json#",
+    "gemeente": "http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=",
+    "lbld": "http://decisions.data.vlaanderen.be/ns#",
+    "mandaat": "http://mandates.data.vlaanderen.be/ns#",
+    "schema": "http://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [{
+    "@type": "schema:OrganizationType",
+    "@id": "editor:orgaan-schepencollege",
+    "dcterms:title": "Schepencollege"
+  }, {
+    "@type": "schema:OrganizationType",
+    "@id": "editor:orgaan-districtsraad",
+    "dcterms:title": "Districtsraad"
+  }, {
+    "@type": "schema:OrganizationType",
+    "@id": "editor:orgaan-gemeenteraad",
+    "dcterms:title": "Gemeenteraad"
+  }, {
+    "@type": "schema:Organization",
+    "@id": "editor:orgaan-gemeenteraad-virgem",
+    "dcterms:title": "Gemeenteraad Virgem",
+    "lbld:type": { "@id": "editor:orgaan-gemeenteraad" }
+  }, {
+    "@type": "schema:Organization",
+    "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
+    "dcterms:title": "Gemeenteraad Vlavirgem",
+    "lbld:type": { "@id": "editor:orgaan-gemeenteraad" }
+  }, {
+    "@type": "schema:Organization",
+    "@id": "editor:orgaan-gemeenteraad-vlagem",
+    "dcterms:title": "Gemeenteraad Vlagem",
+    "lbld:type": { "@id": "editor:orgaan-gemeenteraad" }
+  }, {
+    "@type": "schema:Organization",
+    "dcterms:title": "Voorbeeld Schepencollege",
+    "lbld:type": { "@id": "editor:orgaan-schepencollege" }
+  }, {
+    "@type": "schema:Organization",
+    "dcterms:title": "Voorbeeld Districtsraad",
+    "lbld:type": { "@id": "editor:orgaan-districtsraad" }
+  }, {
+    "@id": "editor:zitting-5",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 25 mei",
+    "date": "2016-05-25",
+    "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
+  }, {
+    "@id": "editor:zitting-4",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 23 maart",
+    "date": "2016-03-23",
+    "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
+  }, {
+    "@id": "editor:zitting-3",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 5 februari",
+    "schema:startDate": "2016-02-05",
+    "lbld:organization": {
+      "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
+      "@type": "schema:Organization",
+      "dcterms:title": "Gemeenteraad Vlavirgem"
+    }
+  }, {
+    "@id": "editor:zitting-2",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 23 maart",
+    "schema:startDate": "2016-03-23",
+    "lbld:organization": {
+      "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
+      "@type": "schema:Organization",
+      "dcterms:title": "Gemeenteraad Vlavirgem"
+    }
+  }, {
+    "@id": "editor:zitting-1",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 25 mei",
+    "date": "2016-05-25",
+    "schema:startDate": "2016-05-25",
+    "lbld:organization": {
+      "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
+      "@type": "schema:Organization",
+      "dcterms:title": "Gemeenteraad Vlavirgem"
+    }
+  }]
+}
