@@ -406,7 +406,7 @@ export default {
         advanced: false,
         person: CURRENT_USER,
         orgaan: 'http://vlavirgem.pieter.pm/#gemeenteraad',
-        zitting: '_:zitting-1',
+        zitting: 'editor:zitting-1',
         template: 0
       },
       mode: 0,
@@ -548,7 +548,7 @@ export default {
       this.$broadcast('blurred')
     },
     defaultZitting () {
-      this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : null
+      this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : 'editor:zitting-1'
     },
     component (p) {
       if (p.subtitle) {
