@@ -518,10 +518,7 @@ export default {
             decision['lbld:changes'] = []
           }
           let man = inert(this.data.pmandaat)
-          man['schema:endDate'] =  {
-            '@type': 'xsd:date',
-            '@value': this.data.pdate
-          }
+          man['schema:endDate'] =  this.xsdDate(this.data.pdate)
           decision['lbld:changes'].push(man)
         }
         if (this.data.kperson) {
@@ -531,15 +528,13 @@ export default {
           decision['lbld:creates'].push({
             '@type': 'mandaat:Mandate',
             'mandaat:mandateType': 'gemeenteraadslid',
-            'mandaat:person': this.data.kperson,
-            'schema:startDate': {
-              '@type': 'xsd:date',
-              '@value': this.zittingDate
-            }
+            'mandaat:person': inert(this.data.kperson),
+            'schema:startDate': this.xsdDate(this.zittingDate)
           })
         }
       }
-      decision['schema:event'] = this.zittingOptions.find(z => z.id === this.env.zitting)
+      decision['schema:event'] = inert(this.zittingOptions.find(z => z.id === this.env.zitting))
+      decision['schema:event']['schema:startDate'] = this.xsdDate(decision['schema:event']['schema:startDate'])
       return decision
     }
   },
@@ -549,6 +544,15 @@ export default {
     },
     defaultZitting () {
       this.env.zitting = this.zittingOptions.length ? this.zittingOptions[0].id : 'editor:zitting-1'
+    },
+    getDate (date) {
+      return typeof date === 'object' ? date['@value'] || this.$root.map[date['@id']]['@value'] : date
+    },
+    xsdDate (date) {
+      return {
+        '@type': 'xsd:date',
+        '@value': this.getDate(date)
+      }
     },
     component (p) {
       if (p.subtitle) {
@@ -619,7 +623,7 @@ export default {
         html += '<div class="container">'
         html += this.$el.querySelector('#jsonld').innerHTML
         html += '</div>'
-        html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld) + '<\/script></body></html>'
+        html += '<script type="application\/ld+json">' + JSON.stringify(this.jsonld, null, 2) + '<\/script></body></html>'
         console.log(html)
         this.$http.post(BACKEND_URL + 'admin/index.php', {
           uri: this.decision.uri,

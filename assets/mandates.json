@@ -14,15 +14,7 @@
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:pieter" }
-  }, {
-    "@type": "mandaat:Mandate",
-    "mandaat:mandateType": "gemeenteraadslid",
     "mandaat:person": { "@id": "_:katie" }
-  }, {
-    "@type": "mandaat:Mandate",
-    "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:raf" }
   }, {
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
@@ -39,9 +31,5 @@
     "@type": "mandaat:Mandate",
     "mandaat:mandateType": "gemeenteraadslid",
     "mandaat:person": { "@id": "_:joep" }
-  }, {
-    "@type": "mandaat:Mandate",
-    "mandaat:mandateType": "gemeenteraadslid",
-    "mandaat:person": { "@id": "_:thomas" }
   }]
 }

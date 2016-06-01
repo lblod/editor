@@ -16,7 +16,6 @@ export const context = {
   "schema": "http://schema.org/",
   "skos": "http://www.w3.org/2004/02/skos/core#",
   "void": "http://rdfs.org/ns/void#",
-  "xs": "http://www.w3.org/2001/XMLSchema#",
   "xsd": "http://www.w3.org/2001/XMLSchema#"
 }
 
