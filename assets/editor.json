@@ -58,8 +58,8 @@
   }, {
     "@id": "editor:zitting-9",
     "@type": "schema:Event",
-    "dcterms:title": "Zitting op 2 januari 2012",
-    "schema:startDate": "2012-01-02",
+    "dcterms:title": "Zitting op 2 januari 2013",
+    "schema:startDate": "2013-01-02",
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
