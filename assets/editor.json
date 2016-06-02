@@ -56,6 +56,16 @@
     "schema:startDate": "2015-03-23",
     "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
   }, {
+    "@id": "editor:zitting-11",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 3 juni 2016",
+    "schema:startDate": "2016-06-03",
+    "lbld:organization": {
+      "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
+      "@type": "schema:Organization",
+      "dcterms:title": "Gemeenteraad Vlavirgem"
+    }
+  }, {
     "@id": "editor:zitting-10",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 9 juni 2016",
