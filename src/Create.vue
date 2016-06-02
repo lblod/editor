@@ -35,10 +35,10 @@
               <option value="1">Wijziging mandaat gemeenteraadslid</option>
             </select>
           </label>
-<!--           <label class="inp" v-if="zittingOptions.length&&env.zitting">
+          <label class="inp" v-if="zittingOptions.length&&env.zitting&&!env.template">
             <span class="inp-label">Onderwerp</span>
             <input class="inp-text" type="text" v-model="decision.subject">
-          </label> -->
+          </label>
         </header>
         <h1 v-text="opschrift||decision.title||decision['dcterms:title']"></h1>
         <div class="mode-editor" v-if="mode==1">
