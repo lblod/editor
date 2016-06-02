@@ -7,7 +7,8 @@
     <div class="article-tools">
       <span class="ref-icon icon-times" @click="rm">&times;</span>
     </div>
-    <p v-if="show&&art" v-text="art.text" class="item-lookup-text"></p>
+    <p v-if="show&&art" v-text="art['dcterms:description']" class="item-lookup-text"></p>
+    <p v-if="show&&!art" class="item-lookup-failed">Het artikel is niet gelinkt omdat het niet gevonden werd.</p>
   </article>
 </template>
 

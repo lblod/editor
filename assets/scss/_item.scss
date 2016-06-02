@@ -17,6 +17,10 @@
 	background-color: #eee;
 	white-space: pre-wrap;
 }
+.item-lookup-failed {
+	max-width: 42rem;
+	opacity: .5;
+}
 .item-toggle {
 	cursor: pointer;
 	text-decoration: underline;
