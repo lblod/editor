@@ -527,11 +527,15 @@ export default {
           }
           decision['lbld:creates'].push({
             '@type': 'mandaat:Mandate',
+            '@id': 'editor:mandaat-' + this.xsdDate(this.zittingDate)['@value'] + '-' + inert(this.data.kperson['schema:name']).toLowerCase().replace(/[^a-z]+/g, '-'),
             'mandaat:mandateType': 'gemeenteraadslid',
             'mandaat:person': inert(this.data.kperson),
             'schema:startDate': this.xsdDate(this.zittingDate)
           })
         }
+      }
+      if (decision['schema:author']) {
+        decision['schema:author']['@id'] = 'people:' + decision['schema:author']['schema:name'].toLowerCase().replace(/[^a-z]+/g, '-')
       }
       decision['schema:event'] = inert(this.zittingOptions.find(z => z.id === this.env.zitting))
       decision['schema:event']['schema:startDate'] = this.xsdDate(decision['schema:event']['schema:startDate'])

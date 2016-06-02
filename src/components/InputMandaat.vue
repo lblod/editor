@@ -38,8 +38,7 @@ export default {
   },
   computed: {
     index () {
-      var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandate').map(this.lookup)
-      console.log('index', fragments)
+      var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandate' && !x['schema:endDate']).map(this.lookup)
       return new Fuse(fragments, fuseOptions)
     }
   },

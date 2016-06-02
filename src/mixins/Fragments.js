@@ -126,6 +126,8 @@ export default {
   },
   ready () {
     this.load('./assets/editor.json')
+    // These are the initial mandates
+    // this.load('./assets/mandates.json')
     this.load('./assets/gemeentedecreet.json')
     this.load('./assets/people.json')
     this.load('http://linkeddatatestagiv.cloudapp.net/poc/decisions.jsonld?limit=100000').catch(function () {
