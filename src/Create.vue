@@ -431,7 +431,7 @@ export default {
     },
     zittingDate () {
       var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
-      return zit && (zit.date || zit['schema:startDate'])
+      return zit && zit['schema:startDate'] && zit['schema:startDate']['@value']
     },
     docs () {
       if (!this.$root.fragments) {
@@ -447,7 +447,7 @@ export default {
       if (opschrift[this.env.template]) {
         return 'Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum') + ' ' + opschrift[this.env.template](this.data)
       }
-      return ['Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum'), d && d.title, this.decision.subject].filter(Boolean).join(' - ')
+      return ['Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum'), this.decision.subject].filter(Boolean).join(' ')
     },
     jsonld () {
       var decision = inert(this.decision);
@@ -527,7 +527,7 @@ export default {
           }
           decision['lbld:creates'].push({
             '@type': 'mandaat:Mandate',
-            '@id': 'editor:mandaat-' + this.xsdDate(this.zittingDate)['@value'] + '-' + inert(this.data.kperson['schema:name']).toLowerCase().replace(/[^a-z]+/g, '-'),
+            '@id': 'current:mandaat-' + this.xsdDate(this.zittingDate)['@value'] + '-' + inert(this.data.kperson['schema:name']).toLowerCase().replace(/[^a-z]+/g, '-'),
             'mandaat:mandateType': 'gemeenteraadslid',
             'mandaat:person': inert(this.data.kperson),
             'schema:startDate': this.xsdDate(this.zittingDate)
