@@ -56,6 +56,16 @@
     "schema:startDate": "2015-03-23",
     "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
   }, {
+    "@id": "editor:zitting-9",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 2 januari 2012",
+    "schema:startDate": "2012-01-02",
+    "lbld:organization": {
+      "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
+      "@type": "schema:Organization",
+      "dcterms:title": "Gemeenteraad Vlavirgem"
+    }
+  }, {
     "@id": "editor:zitting-8",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 2 mei 2012",
