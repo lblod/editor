@@ -100,6 +100,14 @@ export default {
             // Generate missing ids
             if (!f['@id']) {
               f['@id'] = 'editor:' + idCounter++
+            } else {
+              let cur = self.fragments.find(fra => fra.id === f['@id'])
+              if (cur) {
+                for (let key in f) {
+                  cur[key] = f[key]
+                }
+                continue;
+              }
             }
 
             // Shorthands

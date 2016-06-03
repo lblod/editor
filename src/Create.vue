@@ -170,8 +170,8 @@ import {context as exportContext} from './mixins/Fragments.js'
 
 const EMPTY_ARTICLE = {
   '@id': null,
-  'text': null,
-  'refs': null
+  'text': '',
+  'refs': []
 }
 const CURRENT_USER = {
   '@id': null,
@@ -431,7 +431,7 @@ export default {
     },
     zittingDate () {
       var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
-      return zit && zit['schema:startDate'] && zit['schema:startDate']['@value']
+      return this.getDate(zit && zit['schema:startDate'])
     },
     docs () {
       if (!this.$root.fragments) {
@@ -637,6 +637,22 @@ export default {
         })
         this.render = false
       })
+    },
+    articleNumbering () {
+      let obj = this.decision
+      // Article numbering
+      var counter = 0
+      var context
+      for (var i = 0; i < obj.p.length; i++) {
+        if (obj.p[i].title) {
+          context = obj.p[i].context
+          counter = 1
+        } else if (context) {
+          obj.p[i].counter = counter
+          obj.p[i]['@id'] = 'current:' + context.slice(5) + '-' + counter
+          counter++
+        }
+      }
     }
   },
   events: {
@@ -647,25 +663,15 @@ export default {
     append (article) {
       let obj = this.decision
       for (var s = 0; s < obj.p.length; s++) {
-          if (obj.p[s] === article) {
-            var a = inert(EMPTY_ARTICLE)
-            a.type = article.type
-            a.context = article.context
-            obj.p.splice(s + 1, 0, a)
-            break
-          }
-      }
-      // Article numbering
-      var counter = 0
-      for (var i = 0; i < obj.p.length; i++) {
-        if (obj.p[i].title && obj.p[i].context === 'lbld:article') {
-          counter = 1
-        } else if (counter) {
-          obj.p[i].counter = counter
-          obj.p[i]['@id'] = 'current:article-' + counter
-          counter++
+        if (obj.p[s] === article) {
+          var a = inert(EMPTY_ARTICLE)
+          a.type = article.type
+          a.context = article.context
+          obj.p.splice(s + 1, 0, a)
+          break
         }
       }
+      this.articleNumbering()
     },
     rm (article) {
       for (var s = 0; s < this.decision.p.length; s++) {
@@ -678,6 +684,7 @@ export default {
           return
         }
       }
+      this.articleNumbering()
      }
     },
   watch: {

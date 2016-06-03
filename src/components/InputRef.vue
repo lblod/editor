@@ -204,9 +204,11 @@ export default {
       }
 
       // Just fill in value
-      this.term = text
-      this.propSearch = false
-      this.input()
+      if (text.length < 50) {
+        this.term = text
+        this.propSearch = false
+        this.input()
+      }
     }
   },
   components: {
