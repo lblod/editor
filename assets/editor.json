@@ -47,19 +47,37 @@
     "@id": "editor:zitting-vlagem-1",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 25 mei 2016",
-    "schema:startDate": "2016-05-25",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-05-25"},
     "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
   }, {
     "@id": "editor:zitting-vlagem-2",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 23 maart 2015",
-    "schema:startDate": "2015-03-23",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2015-03-23"},
     "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
+  }, {
+    "@id": "editor:zitting-vlagem-3",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 2 januari 2013",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2013-01-02"},
+    "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-vlagem" }
+  }, {
+    "@id": "editor:zitting-virgem-1",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 11 mei 2016",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-05-11"},
+    "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-virgem" }
+  }, {
+    "@id": "editor:zitting-virgem-2",
+    "@type": "schema:Event",
+    "dcterms:title": "Zitting op 2 januari 2013",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2013-01-02"},
+    "lbld:organization": { "@id": "editor:orgaan-gemeenteraad-virgem" }
   }, {
     "@id": "editor:zitting-11",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 3 juni 2016",
-    "schema:startDate": "2016-06-03",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-06-03"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -69,7 +87,7 @@
     "@id": "editor:zitting-10",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 9 juni 2016",
-    "schema:startDate": "2016-06-09",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-06-09"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -79,7 +97,7 @@
     "@id": "editor:zitting-9",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 2 januari 2013",
-    "schema:startDate": "2013-01-02",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2013-01-02"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -89,7 +107,7 @@
     "@id": "editor:zitting-8",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 2 mei 2012",
-    "schema:startDate": "2012-05-02",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2012-05-02"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -99,7 +117,7 @@
     "@id": "editor:zitting-7",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 16 december 2012",
-    "schema:startDate": "2012-12-16",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2012-12-16"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -109,7 +127,7 @@
     "@id": "editor:zitting-6",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 11 november 2013",
-    "schema:startDate": "2013-11-11",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2013-11-11"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -119,7 +137,7 @@
     "@id": "editor:zitting-5",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 21 april 2014",
-    "schema:startDate": "2014-04-21",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2014-04-21"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -129,7 +147,7 @@
     "@id": "editor:zitting-4",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 13 september 2016",
-    "schema:startDate": "2015-09-13",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2015-09-13"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -139,7 +157,7 @@
     "@id": "editor:zitting-3",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 5 februari 2016",
-    "schema:startDate": "2016-02-05",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-02-05"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -149,7 +167,7 @@
     "@id": "editor:zitting-2",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 19 maart 2016",
-    "schema:startDate": "2016-03-19",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-03-19"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
@@ -159,7 +177,7 @@
     "@id": "editor:zitting-1",
     "@type": "schema:Event",
     "dcterms:title": "Zitting op 25 mei 2016",
-    "schema:startDate": "2016-05-25",
+    "schema:startDate": {"@type": "xsd:date", "@value": "2016-05-25"},
     "lbld:organization": {
       "@id": "http://vlavirgem.pieter.pm/#gemeenteraad",
       "@type": "schema:Organization",
