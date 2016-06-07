@@ -126,7 +126,7 @@
           <div v-if="wizard>0">
             <br>
             <p v-if="env.zitting">
-              <button v-if="data.pmandaat&&data.kperson" type="button" @click="compile()">Doorgaan</button>
+              <button v-if="data.pmandaat||data.kperson" type="button" @click="compile()">Doorgaan</button>
               <span v-else>Kies een aftredend en opvolgend gemeenteraadslid</span>
             </p>
             <p v-else>
@@ -333,36 +333,55 @@ var templates = [
     }, {
       text: '',
       placeholder: 'Geef aan wanneer de betrokkene de eedaflegging heeft afgelegd'
-    }, {
-      text: '{{pname}} heeft op '+date+' aan de voorzitter laten weten ontslag te nemen.',
-      placeholder: 'Geef aan hoe en wanneer de betrokkene schriftelijk ontslag heeft meegedeeld aan de voorzitter'
-    }, {
-      text: 'De voorzitter nam kennis van het ontslag van gemeenteraadslid {{pname}} op '+date+'. Door deze kennisname is het ontslag definitief. De raad kan hier enkel akte van nemen.'
-    }, {
-      text: 'Uit het proces-verbaal van het gemeentelijk hoofdbureau blijkt dat {{o1name}} eerste opvolger voor de lijst "{{o1lijst}}" is.'
-    }, {
-      text: 'De geloofsbrieven van {{o1name}} werden behoorlijk en tijdig ingediend en werden ter inzage gelegd met respect voor de decretale bepalingen.'
-    }, {
-      text: 'Uit het onderzoek van de geloofsbrieven van de verkozen gemeenteraadsleden door de gemeenteraad, zoals voorgeschreven in artikel 7, §2 en artikel 10 van het Gemeentedecreet, blijkt dat {{o1name}} voldoet aan de verkiesbaarheidsvoorwaarden.'
-    }, {
-      text: '{{o1name}} heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
-    }, {
+    }]
+    // Ontslag
+    if (data.pname) {
+      p = p.concat([{
+        text: '{{pname}} heeft op '+date+' aan de voorzitter laten weten ontslag te nemen.',
+        placeholder: 'Geef aan hoe en wanneer de betrokkene schriftelijk ontslag heeft meegedeeld aan de voorzitter'
+      }, {
+        text: 'De voorzitter nam kennis van het ontslag van gemeenteraadslid {{pname}} op '+date+'. Door deze kennisname is het ontslag definitief. De raad kan hier enkel akte van nemen.'
+      }, {
+        text: 'Uit het proces-verbaal van het gemeentelijk hoofdbureau blijkt dat {{o1name}} eerste opvolger voor de lijst "{{o1lijst}}" is.'
+      }])
+    }
+    // Aanstelling
+    if (data.o1name) {
+      p = p.concat([{
+        text: 'De geloofsbrieven van {{o1name}} werden behoorlijk en tijdig ingediend en werden ter inzage gelegd met respect voor de decretale bepalingen.'
+      }, {
+        text: 'Uit het onderzoek van de geloofsbrieven van de verkozen gemeenteraadsleden door de gemeenteraad, zoals voorgeschreven in artikel 7, §2 en artikel 10 van het Gemeentedecreet, blijkt dat {{o1name}} voldoet aan de verkiesbaarheidsvoorwaarden.'
+      }, {
+        text: '{{o1name}} heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
+      }])
+    }
+    p.push({
       title: 'Besluit',
       context: 'lbld:article'
-    }, {
-      'type': 'lbld:Article',
-      text: 'De raad neemt kennis van het ontslag van raadslid {{pname}}.'
-    }, {
-      'type': 'lbld:Article',
-      text: 'De raad keurt de geloofsbrieven van {{o1name}} goed.'
-    }, {
-      'type': 'lbld:Article',
-      text: 'De raad neemt kennis van de eedaflegging van {{o1name}} in handen van de voorzitter van de gemeenteraad.'
-    }, {
+    })
+    // Ontslag
+    if (data.pname) {
+      p.push({
+        'type': 'lbld:Article',
+        text: 'De raad neemt kennis van het ontslag van raadslid {{pname}}.'
+      })
+    }
+    // Aanstelling
+    if (data.o1name) {
+      p = p.concat([{
+        'type': 'lbld:Article',
+        text: 'De raad keurt de geloofsbrieven van {{o1name}} goed.'
+      }, {
+        'type': 'lbld:Article',
+        text: 'De raad neemt kennis van de eedaflegging van {{o1name}} in handen van de voorzitter van de gemeenteraad.'
+      }])
+    }
+    p.push({
       title: 'Bijlagen'
-    }, {
+    })
+    p.push({
       text: ''
-    }]
+    })
     return p
   }
 ]
@@ -439,6 +458,7 @@ export default {
         return []
       }
       return this.$root.fragments.filter(t => t['lbld:organization'] && t['lbld:organization']['@id'] === this.env.orgaan)
+      .sort((a, b) => this.getDate(b['schema:startDate']).localeCompare(this.getDate(a['schema:startDate'])))
     },
     zittingDate () {
       var zit = this.zittingOptions.find(z => z.id === this.env.zitting)
@@ -487,8 +507,9 @@ export default {
             p['dcterms:description'] = p.text
           } else if (context === 'lbld:legalBackground' && p['@id'].startsWith('current')) {
             p['@type'] = 'lbld:Article'
-            p['dcterms:title'] = p.text.slice(0, p.text.indexOf('\n'))
+            p['dcterms:title'] = p.text
             if (p.text.indexOf('\n') !== -1) {
+              p['dcterms:title'] = p.text.slice(0, p.text.indexOf('\n'))
               p['dcterms:description'] = p.text.slice(p.text.indexOf('\n') + 1)
             }
           }
