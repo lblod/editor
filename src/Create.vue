@@ -142,12 +142,16 @@
         <pre v-text="jsonld|json"></pre>
       </div>
     </div>
-    <div id="jsonld" style="display:none" v-if="render">
+    <div id="jsonld" style="display:none" v-if="jsonld&&render">
       <h1 v-text="jsonld['dcterms:title']"></h1>
       <section v-for="p in decision.p" track-by="$index">
         <h2 v-if="p.title&&!p.subtitle" class="section-title">{{p.title}}</h2>
         <h3 v-if="p.title&&p.subtitle" class="section-title">{{p.title}}</h3>
-        <div v-if="!p.title" v-text="p.text"></div>
+        <div v-if="!p.title">
+          <div v-if="p.type=='lbld:Article'">Artikel {{p.counter}}</div>
+          {{p.text}}
+          <a v-if="linked(p['@id'])" :href="linked(p['@id'])"></a>
+        </div>
       </section>
       <script type="application/json" v-html="decision|json"></script>
     </div>
@@ -218,6 +222,12 @@ function addRefs (obj) {
   }
   return obj
 }
+const nlMonth = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december']
+function fullDate(date) {
+  let d = new Date(Date.parse(date))
+  if (!d || !d.getDate) return 'datum'
+  return [d.getDate(), nlMonth[d.getMonth()], d.getFullYear()].join(' ')
+}
 
 var sampleDecision
 try {
@@ -285,6 +295,7 @@ var templates = [
       data.kname = data.kperson.name
       data.o1name = data.kperson.name
     }
+    var date = data.pdate ? fullDate(data.pdate) : 'datum'
     var p = [{
       title: 'Juridische gronden',
       context: 'lbld:legalBackground'
@@ -323,10 +334,10 @@ var templates = [
       text: '',
       placeholder: 'Geef aan wanneer de betrokkene de eedaflegging heeft afgelegd'
     }, {
-      text: '',
+      text: '{{pname}} heeft op '+date+' aan de voorzitter laten weten ontslag te nemen.',
       placeholder: 'Geef aan hoe en wanneer de betrokkene schriftelijk ontslag heeft meegedeeld aan de voorzitter'
     }, {
-      text: 'De voorzitter nam kennis van het ontslag van gemeenteraadslid {{pname}} op {{pdate}}. Door deze kennisname is het ontslag definitief. De raad kan hier enkel akte van nemen.'
+      text: 'De voorzitter nam kennis van het ontslag van gemeenteraadslid {{pname}} op '+date+'. Door deze kennisname is het ontslag definitief. De raad kan hier enkel akte van nemen.'
     }, {
       text: 'Uit het proces-verbaal van het gemeentelijk hoofdbureau blijkt dat {{o1name}} eerste opvolger voor de lijst "{{o1lijst}}" is.'
     }, {
@@ -334,7 +345,7 @@ var templates = [
     }, {
       text: 'Uit het onderzoek van de geloofsbrieven van de verkozen gemeenteraadsleden door de gemeenteraad, zoals voorgeschreven in artikel 7, §2 en artikel 10 van het Gemeentedecreet, blijkt dat {{o1name}} voldoet aan de verkiesbaarheidsvoorwaarden.'
     }, {
-      text: 'Mathias Van Compernolle heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
+      text: '{{o1name}} heeft verklaard zich niet in een situatie van onverenigbaarheid te bevinden.'
     }, {
       title: 'Besluit',
       context: 'lbld:article'
@@ -445,9 +456,9 @@ export default {
       }
       var d = inert(data[this.env.template])
       if (opschrift[this.env.template]) {
-        return 'Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum') + ' ' + opschrift[this.env.template](this.data)
+        return 'Gemeenteraadsbesluit van ' + fullDate(this.zittingDate || 'datum') + ' ' + opschrift[this.env.template](this.data)
       }
-      return ['Gemeenteraadsbesluit van ' + (this.zittingDate || 'datum'), this.decision.subject].filter(Boolean).join(' ')
+      return ['Gemeenteraadsbesluit van ' + fullDate(this.zittingDate || 'datum'), this.decision.subject].filter(Boolean).join(' ')
     },
     jsonld () {
       var decision = inert(this.decision);
@@ -538,11 +549,19 @@ export default {
         decision['schema:author']['@id'] = 'people:' + decision['schema:author']['schema:name'].toLowerCase().replace(/[^a-z]+/g, '-')
       }
       decision['schema:event'] = inert(this.zittingOptions.find(z => z.id === this.env.zitting))
-      decision['schema:event']['schema:startDate'] = this.xsdDate(decision['schema:event']['schema:startDate'])
+      if (decision['schema:event']) {
+        decision['schema:event']['schema:startDate'] = this.xsdDate(decision['schema:event']['schema:startDate'])
+      }
       return decision
     }
   },
   methods: {
+    linked (t) {
+      if (!t || !t.startsWith('gemeente')) {
+        return
+      }
+      return 'http://codex.vlaanderen.be/Zoeken/Document.aspx?DID=1013949&param=inhoud&AID=' + t
+    },
     blurred () {
       this.$broadcast('blurred')
     },
@@ -621,7 +640,7 @@ export default {
         var html = '<!DOCTYPE html><html lang="nl"><head><meta charset="utf-8">'
         html += '<title>' + this.opschrift + ' - LBLOD</title>'
         html += '<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">'
-        html += '<style type="text/css">section>div{white-space:pre-wrap;margin-bottom:.5rem}</style>'
+        html += '<style type="text/css">section>div{white-space:pre-wrap;margin-bottom:.5rem}a:after { content: url(http://upload.wikimedia.org/wikipedia/commons/6/64/Icon_External_Link.png);margin: 0 0 0 5px;}</style>'
         html += '</head><body>'
         html += '<div class="jumbotron"><div class="container"><h1>Lokaal besluit</h1><p>Deze webstek maakt deel uit van het project LBLOD.</p><p><a class="btn btn-primary btn-lg" href="http://lokaalbestuur.vlaanderen.be/lokale-besluiten-als-gelinkte-open-data" role="button">Meer info &raquo;</a></p></div></div>'
         html += '<div class="container">'
