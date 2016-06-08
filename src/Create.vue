@@ -95,7 +95,7 @@
           <div v-if="wizard==1">
             <label class="inp">
               <span class="inp-label">Ontslagnemend gemeenteraadslid</span>
-              <input-mandaat :model.sync="data.pmandaat" :placeholder="data.pmandaat&&data.pmandaat.name||'Voornaam + familienaam'"></input-mandaat>
+              <input-mandaat :model.sync="data.pmandaat" :placeholder="data.pmandaat&&data.pmandaat.name||'Voornaam + familienaam'" :org="env.orgaan"></input-mandaat>
             </label>
             <div v-if="data.pmandaat">
               <label class="inp">
@@ -422,7 +422,7 @@ var opschrift = [
       subj.push('de kennisname van het ontslag van raadslid ' + data.pmandaat.name)
     }
     if (data.kperson) {
-      subj.push('de installatie van opvolger ' + data.kperson.name)
+      subj.push('de installatie van ' + data.kperson.name)
     }
     return subj ? 'betreffende ' + subj.join(' en ') : ''
   }
@@ -562,6 +562,7 @@ export default {
             '@id': 'current:mandaat-' + this.xsdDate(this.zittingDate)['@value'] + '-' + inert(this.data.kperson['schema:name']).toLowerCase().replace(/[^a-z]+/g, '-'),
             'mandaat:mandateType': 'gemeenteraadslid',
             'mandaat:person': inert(this.data.kperson),
+            'lbld:organization': { '@id': this.env.orgaan },
             'schema:startDate': this.xsdDate(this.zittingDate)
           })
         }

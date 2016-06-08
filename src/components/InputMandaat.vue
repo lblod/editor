@@ -27,6 +27,7 @@ export default {
     model: {
       twoWay: true
     },
+    org: null,
     placeholder: null
   },
   data () {
@@ -38,7 +39,10 @@ export default {
   },
   computed: {
     index () {
-      var fragments = this.$root.fragments.filter(x => x['@type'] === 'mandaat:Mandate' && !x['schema:endDate']).map(this.lookup)
+      var fragments = this.$root.fragments
+      .filter(x => x['@type'] === 'mandaat:Mandate' && !x['schema:endDate'])
+      .filter(x => (!x['lbld:organization'] && this.org === 'http://vlavirgem.pieter.pm/#gemeenteraad') || x['lbld:organization']['@id'] === this.org)
+      .map(this.lookup)
       return new Fuse(fragments, fuseOptions)
     }
   },
